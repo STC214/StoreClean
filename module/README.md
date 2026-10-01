@@ -72,7 +72,7 @@ python -X utf8 tools/build_module.py
 
 输出：APK、新增源码 patch、源码 ZIP、逐命令验证 JSON。策略 fixture 验证了基线值、启用覆盖、排除项、存储不变与恢复基线；生产代码回调还通过了明确使用 host fake 的调用测试，覆盖受控读取/写入、排除项放行及入口隐藏/点击清除。它们不运行 Android 页面或真正的 Xposed 引擎，fake 类不进入 APK。
 
-发行产物为 `release/storeclean-1.0.0.apk`、`release/storeclean-1.0.0.patch`、`release/storeclean-1.0.0-source.zip` 和 `release/storeclean-1.0.0-verification.json`。0.1.0 产物保留作基线，不覆盖历史验证记录。
+发行产物为 `release/storeclean-1.0.0.apk`、`release/storeclean-1.0.0.patch`、`release/storeclean-1.0.0-source.zip` 和 `release/storeclean-1.0.0-verification.json`。0.1.0 发行文件及版本构建目录已清理；历史真机记录与 1.0.0 验证 JSON 中已完成的基线比较结果保留。后续构建若无旧 APK，将如实标记基线缺失，不重新声称执行了比较。
 
 源码 ZIP 导出模块代码、测试、全部工具脚本及项目说明；复构建仍需本项目的 `analysis/` 证据、`store_apk/` 原件及本机 SDK/编译依赖与签名密钥。`.gitignore` 排除 APK 原件、发行包、提取证据、构建目录、依赖、密钥和缓存，保留源码与分析汇总。
 
