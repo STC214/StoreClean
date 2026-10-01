@@ -1,0 +1,28 @@
+{
+  "command": "python -X utf8 tools/compare_apks.py",
+  "checks": [
+    {
+      "version": "4.126.10",
+      "original_and_copy_hash": "PASS",
+      "settings_count": 16,
+      "getters_present": 15,
+      "security_check_excluded": "PASS"
+    },
+    {
+      "version": "4.126.s.1",
+      "original_and_copy_hash": "PASS",
+      "settings_count": 16,
+      "getters_present": 15,
+      "security_check_excluded": "PASS"
+    },
+    {
+      "version": "4.126.s.2",
+      "original_and_copy_hash": "PASS",
+      "settings_count": 16,
+      "getters_present": 15,
+      "security_check_excluded": "PASS"
+    }
+  ],
+  "schemas_equal": true,
+  "scope": "static analysis only; device runtime not tested"
+}

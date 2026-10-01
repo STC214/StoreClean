@@ -1,0 +1,122 @@
+{
+  "records": [
+    {
+      "command": [
+        "F:\\Programer\\miniforge3\\python.exe",
+        "-X",
+        "utf8",
+        "tools/compare_apks.py"
+      ],
+      "exit_code": 0,
+      "stdout": "4.126.10 (40007640): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n4.126.s.1 (40007621): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n4.126.s.2 (40007622): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n{\"category\": \"导航栏管理\", \"title\": \"视频专区\", \"key\": \"pref_key_short_play\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"活动专题页\", \"key\": \"pref_key_h5_topic\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"软件-全球上网\", \"key\": \"pref_key_global_net\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"软件-快应用\", \"key\": \"pref_key_quick_app\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"自动生成云游戏桌面图标\", \"key\": \"pref_key_cloud_game_icon\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"显示游戏抽奖\", \"key\": \"pref_key_support_game_lottery\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"小游戏服务\", \"key\": \"pref_key_mini_game\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"显示首页最近使用的小程序\", \"key\": \"pref_key_mini_program_switch\", \"required\": false}\n{\"category\": \"我的页功能管理\", \"title\": \"手机清理功能\", \"key\": \"pref_key_phone_clean\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"开启应用安全检测\", \"key\": \"pref_key_app_security_check\", \"required\": null}\n{\"category\": \"我的页功能管理\", \"title\": \"应用锁\", \"key\": \"pref_key_app_lock\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"权限管理\", \"key\": \"pref_key_permission_management\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"互联升级\", \"key\": \"pref_key_milink_service\", \"required\": true}\n{\"category\": \"其他功能管理\", \"title\": \"显示福利活动\", \"key\": \"pref_key_need_welfare\", \"required\": false}\n{\"category\": \"其他功能管理\", \"title\": \"未成年人模式\", \"key\": \"pref_key_child_mode_setting\", \"required\": false}\n{\"category\": \"其他功能管理\", \"title\": \"果园入口\", \"key\": \"pref_key_orchard\", \"required\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "java",
+        "-jar",
+        "F:/Android/Sdk/build-tools/36.1.0/lib/apksigner.jar",
+        "verify",
+        "--print-certs",
+        "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_1\\input.apk"
+      ],
+      "exit_code": 0,
+      "stdout": "Signer #1 certificate DN: EMAILADDRESS=miui@xiaomi.com, CN=MIUI, OU=MIUI, O=Xiaomi, L=Beijing, ST=Beijing, C=CN\nSigner #1 certificate SHA-256 digest: c9009d01ebf9f5d0302bc71b2fe9aa9a47a432bba17308a3111b75d7b2149025\nSigner #1 certificate SHA-1 digest: 7b6dc7079c34739ce81159719fb5eb61d2a03225\nSigner #1 certificate MD5 digest: 701478a1e3b4b7e3978ea69469410f13\n",
+      "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+    },
+    {
+      "command": [
+        "java",
+        "-jar",
+        "F:/Android/Sdk/build-tools/36.1.0/lib/apksigner.jar",
+        "verify",
+        "--print-certs",
+        "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_2\\input.apk"
+      ],
+      "exit_code": 0,
+      "stdout": "Signer #1 certificate DN: EMAILADDRESS=miui@xiaomi.com, CN=MIUI, OU=MIUI, O=Xiaomi, L=Beijing, ST=Beijing, C=CN\nSigner #1 certificate SHA-256 digest: c9009d01ebf9f5d0302bc71b2fe9aa9a47a432bba17308a3111b75d7b2149025\nSigner #1 certificate SHA-1 digest: 7b6dc7079c34739ce81159719fb5eb61d2a03225\nSigner #1 certificate MD5 digest: 701478a1e3b4b7e3978ea69469410f13\n",
+      "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+    },
+    {
+      "command": [
+        "java",
+        "-jar",
+        "F:/Android/Sdk/build-tools/36.1.0/lib/apksigner.jar",
+        "verify",
+        "--print-certs",
+        "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_3\\input.apk"
+      ],
+      "exit_code": 0,
+      "stdout": "Signer #1 certificate DN: EMAILADDRESS=miui@xiaomi.com, CN=MIUI, OU=MIUI, O=Xiaomi, L=Beijing, ST=Beijing, C=CN\nSigner #1 certificate SHA-256 digest: c9009d01ebf9f5d0302bc71b2fe9aa9a47a432bba17308a3111b75d7b2149025\nSigner #1 certificate SHA-1 digest: 7b6dc7079c34739ce81159719fb5eb61d2a03225\nSigner #1 certificate MD5 digest: 701478a1e3b4b7e3978ea69469410f13\n",
+      "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+    }
+  ],
+  "collected_class_sha256": {
+    "apk_1": {
+      "DoubleTabProxyActivityWrapper.smali": "bdb35846ad24db51ed943dbaeaf91f4cccaf897e825d9487e7b98a2e00d54520",
+      "EntranceConfig.smali": "35ac09090cbedce1ba47af1188940b62b6c918da270064b1839c22e43a36b5a4",
+      "EntranceManager.smali": "ff5412db060c46bc7493d7d241dd4d51b2f514d85b7692f9f8a0cbbbcc4379db",
+      "EntranceView.smali": "5ff964276ca243a29c6846a619dfada636b3683aa61dcc6f2042f5d39861e284",
+      "FunctionSettingsFragment.smali": "323618ef680d051fdc1f1a2b91cba6f0d925b1cc7516e08794a3de2bf1d09bf5",
+      "HomeFeatureTabFragment.smali": "740723ee106e80b54045f2c73d3bb29f183b373f3df081c42989ed2bf01ef841",
+      "IncentiveRouter.smali": "2144d5854e04f8980edd1974fc1298e7d2a4fdaba9f4812adfba7fc890aa907d",
+      "IncentiveSDKHelper.smali": "3682954361f219822d5924ce72774bbc955ccd5065f0bb76efcd6e23ef9142e9",
+      "MainSearchContainer.smali": "fffb6d041a9cc6fcbd55a62e8fa13ec6bcc9edc5643db343c887e2f67ddb9d52",
+      "MarketTabActivity.smali": "fae0619feb9690358aa93cb202056aa107c1ae5414a58a114305e83cd2d02287",
+      "NativeHomePagePagerFragment.smali": "3d39e4b10fbf1b9a38fbabb14d843b87b10794aebbad4fa538187efc16865f64",
+      "OrchardEntranceManager.smali": "1ee9e5153279e78c1c05448c3d7fbaf738f001b9e527cd553369546fa29bc2c7",
+      "OrchardSdkHelper.smali": "cfec8970670ce75a1fd6e3ec2220ac21b20c7c26fde439a352a82c6233b976a4",
+      "PageConfig.smali": "f6719cb3c16277785405b759abb82ad486cb4340dc0bae802397d6b044904d39",
+      "Preference.smali": "578f969fd3744947007a0d43b244c4ee42bbf2105ff93d5a68c96d31a8fb23fc",
+      "PreferenceHelperKt.smali": "d2e9664900c434ccbac86451a8d223bfbb66aa1e13f4318d64f57b92e17e4f33",
+      "PrefUtils.smali": "f6e612ba94e539558573a4c34c091c1034d0fd82b6f12142a8ead38d6e0967c4",
+      "SettingsUtils.smali": "e10cd9f19679635844b4f597d35931e6a16c62b8ddbedd85b3369191ba66ab04",
+      "TwoStatePreference.smali": "cd5ac2ee36bfe338ec238a73fdf7c37643497eeb60f124c4c49e74590561ddef"
+    },
+    "apk_2": {
+      "DoubleTabProxyActivityWrapper.smali": "c458c86706ecd719df1a90b9f3a9ba94bfe65897840cf5dda94eedc6faeb4152",
+      "EntranceConfig.smali": "0d230280374c8983f8e234894426f5a27c92ef980a21ec5655df8358d7540c09",
+      "EntranceManager.smali": "e2e0c5e3487e189fec96a9e2e338bf82145a52a1e81a2ab79df1fc40f2fea9f6",
+      "EntranceView.smali": "abf13a9f7b44b7efafc2359fa069c2b2aa3663066eb014e3ffae8f265da7df1a",
+      "FunctionSettingsFragment.smali": "07d8e7c63deb76c8f4c8793c0860efad5d4076185cb6065d4515735daa9be64e",
+      "HomeFeatureTabFragment.smali": "5bc0078882fdd640706270aae697797093e1cbcee1298b1d755d19bb1d3fb06d",
+      "IncentiveRouter.smali": "c9ef3863d950899635fae54d481ed2f0cd5bc1c49647f313c98780421d9e0c27",
+      "IncentiveSDKHelper.smali": "57968cac07750ac6cbd125286d5ae9fff38dc1e78e798368d4851cb7e42a898f",
+      "MainSearchContainer.smali": "fa1ea8a9c3a8a5e086ae787239af182aee1c94827aa8eca0dbc01732f80c0b1d",
+      "MarketTabActivity.smali": "4435606bf1772118948e21dc96cc335f3ba33eaa2d85340cc47c9ee210c0e309",
+      "NativeHomePagePagerFragment.smali": "5c306f441fc6a5b921b394ffc2d6b8136fbb0910d7c55ac485a47d1936a31f25",
+      "OrchardEntranceManager.smali": "90f13fcaf78becdf283e9348a14d05affe3041dc24bf5d7646c17ddd5737db60",
+      "OrchardSdkHelper.smali": "df6011d10dd384c8ce5acdc5f12977e21eadf2902c5b0cbeafd03eeb8eeb9d81",
+      "PageConfig.smali": "71650c891998ba6c7e7bec1c23af44874cf5c265b3642b1a21d68d0712810a44",
+      "Preference.smali": "578f969fd3744947007a0d43b244c4ee42bbf2105ff93d5a68c96d31a8fb23fc",
+      "PreferenceHelperKt.smali": "b07903d407a39a94a52e701c97e38d5fa08c322f1829dcc613d6a4118233440d",
+      "PrefUtils.smali": "19e7335e16a163fe606f9d56eafc335082c87d630d27cd50ea3db8fc4bef42ee",
+      "SettingsUtils.smali": "91f97e47ffa00781bf4344d9014780c67daf92c920424fb14d1322b90902f04e",
+      "TwoStatePreference.smali": "cd5ac2ee36bfe338ec238a73fdf7c37643497eeb60f124c4c49e74590561ddef"
+    },
+    "apk_3": {
+      "DoubleTabProxyActivityWrapper.smali": "c458c86706ecd719df1a90b9f3a9ba94bfe65897840cf5dda94eedc6faeb4152",
+      "EntranceConfig.smali": "0d230280374c8983f8e234894426f5a27c92ef980a21ec5655df8358d7540c09",
+      "EntranceManager.smali": "e2e0c5e3487e189fec96a9e2e338bf82145a52a1e81a2ab79df1fc40f2fea9f6",
+      "EntranceView.smali": "abf13a9f7b44b7efafc2359fa069c2b2aa3663066eb014e3ffae8f265da7df1a",
+      "FunctionSettingsFragment.smali": "07d8e7c63deb76c8f4c8793c0860efad5d4076185cb6065d4515735daa9be64e",
+      "HomeFeatureTabFragment.smali": "5bc0078882fdd640706270aae697797093e1cbcee1298b1d755d19bb1d3fb06d",
+      "IncentiveRouter.smali": "c9ef3863d950899635fae54d481ed2f0cd5bc1c49647f313c98780421d9e0c27",
+      "IncentiveSDKHelper.smali": "57968cac07750ac6cbd125286d5ae9fff38dc1e78e798368d4851cb7e42a898f",
+      "MainSearchContainer.smali": "fa1ea8a9c3a8a5e086ae787239af182aee1c94827aa8eca0dbc01732f80c0b1d",
+      "MarketTabActivity.smali": "4435606bf1772118948e21dc96cc335f3ba33eaa2d85340cc47c9ee210c0e309",
+      "NativeHomePagePagerFragment.smali": "5c306f441fc6a5b921b394ffc2d6b8136fbb0910d7c55ac485a47d1936a31f25",
+      "OrchardEntranceManager.smali": "90f13fcaf78becdf283e9348a14d05affe3041dc24bf5d7646c17ddd5737db60",
+      "OrchardSdkHelper.smali": "df6011d10dd384c8ce5acdc5f12977e21eadf2902c5b0cbeafd03eeb8eeb9d81",
+      "PageConfig.smali": "71650c891998ba6c7e7bec1c23af44874cf5c265b3642b1a21d68d0712810a44",
+      "Preference.smali": "578f969fd3744947007a0d43b244c4ee42bbf2105ff93d5a68c96d31a8fb23fc",
+      "PreferenceHelperKt.smali": "b07903d407a39a94a52e701c97e38d5fa08c322f1829dcc613d6a4118233440d",
+      "PrefUtils.smali": "19e7335e16a163fe606f9d56eafc335082c87d630d27cd50ea3db8fc4bef42ee",
+      "SettingsUtils.smali": "91f97e47ffa00781bf4344d9014780c67daf92c920424fb14d1322b90902f04e",
+      "TwoStatePreference.smali": "cd5ac2ee36bfe338ec238a73fdf7c37643497eeb60f124c4c49e74590561ddef"
+    }
+  },
+  "s1_s2_collected_classes_identical": true,
+  "device_runtime": "NOT TESTED",
+  "module_build": "See module build verification record"
+}

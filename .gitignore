@@ -1,0 +1,25 @@
+# Original APK inputs and generated release packages (keep locally).
+/store_apk/
+/release/
+
+# Extracted/decompiled APK evidence; keep analysis/*.md and summary JSON.
+/analysis/*/
+/analysis/*.partial
+
+# Python caches and local environments.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Signing material must stay local; module/.gitignore also excludes deps/build.
+*.jks
+*.keystore
+
+# Machine-specific IDE settings and OS metadata.
+/.idea/
+/.vscode/
+Thumbs.db
+.DS_Store

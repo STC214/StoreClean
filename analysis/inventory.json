@@ -1,0 +1,224 @@
+[
+  {
+    "file": "store_apk\\应用商店_4.126.10.apk",
+    "analysis_directory": "analysis\\apk_1",
+    "copy": "analysis\\apk_1\\input.apk",
+    "bytes": 59978448,
+    "sha256": "14dd58663e83d83dc6ab0f95af88be3d2b96ca28c651e3e8f7b0144807e4c05a",
+    "unchanged": true,
+    "zip_integrity": "passed",
+    "dex": [
+      {
+        "name": "classes.dex",
+        "sha256": "b277e7972cffa8f0f63c696785610e5141cd470f553ec454347756757319bbac",
+        "strings": 91671
+      },
+      {
+        "name": "classes2.dex",
+        "sha256": "d2e980caf63ce5713798e26b0305c4c05a0bef2501d91d6821255c3760cfda62",
+        "strings": 53462
+      },
+      {
+        "name": "classes3.dex",
+        "sha256": "1755f3a3ad036c0c47ef7cabe3d019a0633a26a6a071366020a5064126dda250",
+        "strings": 93738
+      },
+      {
+        "name": "classes4.dex",
+        "sha256": "0ec0f09b3993655843a1d65745f5f246084c41b4fbca5388c196a5c8d7d1e649",
+        "strings": 82316
+      },
+      {
+        "name": "classes5.dex",
+        "sha256": "668b602fb44c8e02cf44f2e74a197b2db5b578ecbab2dc921bfe735bf5c5fa53",
+        "strings": 23846
+      }
+    ],
+    "commands": [
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "badging",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_1\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_1\\badging.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "--values",
+          "resources",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_1\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_1\\resources.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "xmltree",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_1\\input.apk",
+          "AndroidManifest.xml"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_1\\manifest.txt",
+        "stderr": ""
+      }
+    ],
+    "dex_hits": 2531
+  },
+  {
+    "file": "store_apk\\应用商店_4.126.s.1.apk",
+    "analysis_directory": "analysis\\apk_2",
+    "copy": "analysis\\apk_2\\input.apk",
+    "bytes": 60164196,
+    "sha256": "e91411e74218b2cea0da73e5a0ad3859524583107abb7b928534885c7e0e720b",
+    "unchanged": true,
+    "zip_integrity": "passed",
+    "dex": [
+      {
+        "name": "classes.dex",
+        "sha256": "4d366ac7f8100c25be83b3c938c384bb989286ad1b49a417bf484712aaf802bb",
+        "strings": 91748
+      },
+      {
+        "name": "classes2.dex",
+        "sha256": "4186a0ceb987df30e415af5a0f07f2825b22e2c1b10e954e26e18201803c1163",
+        "strings": 53468
+      },
+      {
+        "name": "classes3.dex",
+        "sha256": "44792f70d102d11d3db68b5b1e587ce155fdaa24787f87430254b47bd26b4eee",
+        "strings": 91999
+      },
+      {
+        "name": "classes4.dex",
+        "sha256": "9b8886527c84bdb1e59436b2ae44fd2d0119ac7f9074b318d4eac103ff5f797f",
+        "strings": 81919
+      },
+      {
+        "name": "classes5.dex",
+        "sha256": "f259f26cd045a9dffd93425a0790f8c88b0fa29b38a2cc917a76bd4657ffe037",
+        "strings": 23888
+      }
+    ],
+    "commands": [
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "badging",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_2\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_2\\badging.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "--values",
+          "resources",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_2\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_2\\resources.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "xmltree",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_2\\input.apk",
+          "AndroidManifest.xml"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_2\\manifest.txt",
+        "stderr": ""
+      }
+    ],
+    "dex_hits": 2381
+  },
+  {
+    "file": "store_apk\\应用商店_4.126.s.2.apk",
+    "analysis_directory": "analysis\\apk_3",
+    "copy": "analysis\\apk_3\\input.apk",
+    "bytes": 60168292,
+    "sha256": "bfcad45e5444e4024e5abadec64a08da0a296d229864ab9bb5c8e36ad8df7a72",
+    "unchanged": true,
+    "zip_integrity": "passed",
+    "dex": [
+      {
+        "name": "classes.dex",
+        "sha256": "a627e1f6dffcfb0cef8bded8cc708d4bc255395c00ce28ee4545e74027351111",
+        "strings": 91749
+      },
+      {
+        "name": "classes2.dex",
+        "sha256": "81b20fb6930759f3d84e36f1873154a47f053abe787686ac2bbd50acb6a78f80",
+        "strings": 53466
+      },
+      {
+        "name": "classes3.dex",
+        "sha256": "30fbf6fff178564ba2e02b2c0f6518adc9963a0354c4d557a9041065084f4a5a",
+        "strings": 91999
+      },
+      {
+        "name": "classes4.dex",
+        "sha256": "ebae60676ed5079d0d7a52b568870f0f6435c2a15693cf881c1a538d0d6f077a",
+        "strings": 81921
+      },
+      {
+        "name": "classes5.dex",
+        "sha256": "5568b4c85859d8c4556e9ad5d57876b2e4ffe4ae0941233bd383b757645549bf",
+        "strings": 23888
+      }
+    ],
+    "commands": [
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "badging",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_3\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_3\\badging.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "--values",
+          "resources",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_3\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_3\\resources.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "xmltree",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_3\\input.apk",
+          "AndroidManifest.xml"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_3\\manifest.txt",
+        "stderr": ""
+      }
+    ],
+    "dex_hits": 2381
+  }
+]
