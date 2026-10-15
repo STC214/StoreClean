@@ -2,6 +2,9 @@
 /store_apk/
 /release/
 
+# User-provided original artwork stays local; cropped module resources are tracked.
+/icon.png
+
 # Extracted/decompiled APK evidence; keep analysis/*.md and summary JSON.
 /analysis/*/
 /analysis/*.partial

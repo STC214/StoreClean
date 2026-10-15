@@ -40,7 +40,28 @@ public final class HookCallbackTest {
         require(entrance.visibility == View.GONE && !entrance.enabled
                 && !entrance.clickable && entrance.listener == null, "entrance state/click suppression");
         hide.invoke(null, new Object());
-        System.out.println("PASS production callbacks with host fakes: 15 reads/writes, excluded values pass through, constant skips, entrance GONE and click removed");
+        Method resolver = StoreHooks.class.getDeclaredMethod("resolveOrchardMethods", Class.class);
+        resolver.setAccessible(true);
+        require(((java.util.List<?>) resolver.invoke(null, OldSdk.class)).size() == 5, "canonical old SDK plan");
+        require(((java.util.List<?>) resolver.invoke(null, NewSdk.class)).size() == 8, "seven launches plus H5");
+        Method validator = StoreHooks.class.getDeclaredMethod("validateOrchardMethod", Method.class);
+        validator.setAccessible(true);
+        for (Class<?> bad : new Class<?>[] {WrongArgument.class, WrongReturn.class, WrongStatic.class,
+                WrongH5.class, WrongCallback.class}) {
+            try {
+                validator.invoke(null, bad.getDeclaredMethods()[0]);
+                throw new AssertionError("Malformed orchard contract accepted: " + bad);
+            } catch (java.lang.reflect.InvocationTargetException expected) {
+                require(expected.getCause() instanceof IllegalStateException, "malformed launch rejection");
+            }
+        }
+        try {
+            resolver.invoke(null, MissingCanonical.class);
+            throw new AssertionError("Noncanonical overloads accepted");
+        } catch (java.lang.reflect.InvocationTargetException expected) {
+            require(expected.getCause() instanceof NoSuchMethodException, "missing canonical rejection");
+        }
+        System.out.println("PASS production callbacks with host fakes: 15 reads/writes, exclusions, constant skips, entrance hidden; 5/8 SDK methods resolved; malformed/missing contracts rejected");
     }
 
     private static XC_MethodHook callback(String name, Class<?>[] types, Object... args)
@@ -75,4 +96,32 @@ public final class HookCallbackTest {
             return key;
         }
     }
+
+    public static class OldSdk {
+        public void launchOrchard(android.app.Activity a) {}
+        public void launchOrchard(android.app.Activity a, String b) {}
+        public void launchOrchard(android.app.Activity a, String b, String c) {}
+        public void launchOrchard(android.app.Activity a, String b, String c, Integer d) {}
+        public void launchOrchard(android.app.Activity a, String b, String c, Integer d, Map<?, ?> e) {}
+    }
+
+    public static class NewSdk {
+        public void launchOrchard(android.app.Activity a) {}
+        public void launchOrchard(android.app.Activity a, String b) {}
+        public void launchOrchard(android.app.Activity a, String b, String c) {}
+        public void launchOrchard(android.app.Activity a, String b, String c, Integer d) {}
+        public void launchOrchard(android.app.Activity a, String b, String c, Integer d, Map<?, ?> e) {}
+        public void launchOrchard(android.app.Activity a, String b, String c, Integer d, Map<?, ?> e, boolean f) {}
+        public void launchOrchard(android.app.Activity a, String b, String c, Integer d, Map<?, ?> e, boolean f, Runnable g) {}
+        public void launchOrchardH5$app_release(android.app.Activity a, String b, String c, Integer d, Map<?, ?> e) {}
+    }
+
+    public static class WrongArgument { public void launchOrchard(android.app.Activity a, int b) {} }
+    public static class WrongReturn { public String launchOrchard(android.app.Activity a) { return ""; } }
+    public static class WrongStatic { public static void launchOrchard(android.app.Activity a) {} }
+    public static class WrongH5 { public void launchOrchardH5$app_release(android.app.Activity a) {} }
+    public static class WrongCallback {
+        public void launchOrchard(android.app.Activity a, String b, String c, Integer d, Map<?, ?> e, boolean f, int g) {}
+    }
+    public static class MissingCanonical { public void launchOrchard(android.app.Activity a, int b) {} }
 }

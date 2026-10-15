@@ -51,8 +51,20 @@ def capture(command, output):
 def main():
     output = ROOT / "analysis"
     output.mkdir(exist_ok=True)
-    entries = []
-    for number, apk in enumerate(sorted((ROOT / "store_apk").glob("*.apk")), start=1):
+    inventory_path = output / "inventory.json"
+    entries = json.loads(inventory_path.read_text(encoding="utf-8")) if inventory_path.exists() else []
+    for apk in sorted((ROOT / "store_apk").glob("*.apk")):
+        known = next((entry for entry in entries if ROOT / entry["file"] == apk), None)
+        if known:
+            with apk.open("rb") as source:
+                assert hashlib.file_digest(source, "sha256").hexdigest() == known["sha256"], "Registered original changed"
+            with (ROOT / known["copy"]).open("rb") as source:
+                assert hashlib.file_digest(source, "sha256").hexdigest() == known["sha256"], "Registered copy changed"
+            print(f"{apk.name}: existing evidence preserved")
+            continue
+        number = 1
+        while (output / f"apk_{number}").exists():
+            number += 1
         directory = output / f"apk_{number}"
         directory.mkdir(exist_ok=True)
         with apk.open("rb") as source:
@@ -91,7 +103,7 @@ def main():
         entry = {"file": str(apk.relative_to(ROOT)), "analysis_directory": str(directory.relative_to(ROOT)), "copy": str(copy.relative_to(ROOT)), "bytes": apk.stat().st_size, "sha256": original_hash, "unchanged": True, "zip_integrity": "passed", "dex": dex_inventory, "commands": commands, "dex_hits": len(hits)}
         entries.append(entry)
         print(f"{apk.name}: sha256={original_hash}; dex={len(dex_inventory)}; hits={len(hits)}; unchanged=True")
-    (output / "inventory.json").write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    inventory_path.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

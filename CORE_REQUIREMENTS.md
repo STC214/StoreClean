@@ -35,9 +35,10 @@
 
 ## 发行状态与验证边界
 
-- 正式版：StoreClean 1.1.0，versionCode 3，产物 `release/storeclean-1.1.0.apk`。
+- 正式版：StoreClean 1.1.1，versionCode 4，产物 `release/storeclean-1.1.1.apk`；新增图标并补强接口结构校验，原固定开关策略与入口阻断目标不变。
 - 保留原包名和签名，支持覆盖更新；发行包显式关闭调试。补齐新版果树重载和 H5 入口拦截。
 - 0.1.0 在应用商店 4.126.10 上已获得用户视觉确认及主进程 34 个 Hook 初始化日志，见 `analysis/RUNTIME_VALIDATION.md`。
 - 1.1.0 已在当前手机的 4.127.11 上覆盖安装，主进程 37 个 Hook 注册成功；用户确认水果入口消失、设置开关正常。见 `analysis/COMPATIBILITY_1.1.0.md`。
 - 未登记 4.x 版本须通过完整菜单与 Hook 结构检查才尝试启用，不盲目扩大白名单；s.1/s.2、未登记版本、核心业务回归及设备回退仍待专项验证。
 - 使用、构建和回退说明见 `module/README.md`。原始 APK、构建与发行产物、密钥、缓存保留本地，通过 `.gitignore` 排除。
+- `release/` 只放最新成品 APK；源码 ZIP、补丁、验证记录与签名旁文件保存在 `analysis/release_artifacts/`，历史资料不删除，分析样本不受影响。重复审查与回归范围见 `analysis/REVIEW_2026-10-15.md`。

@@ -8,6 +8,7 @@ import re
 import struct
 import subprocess
 import sys
+import tempfile
 import xml.etree.ElementTree as ET
 import zipfile
 from pathlib import Path
@@ -15,11 +16,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = ROOT / "module"
+ARTIFACTS = ROOT / "analysis/release_artifacts"
 SDK = Path("F:/Android/Sdk")
 BUILD_TOOLS = SDK / "build-tools/36.1.0"
 ANDROID = SDK / "platforms/android-35/android.jar"
 API = MODULE / "deps/xposed-api-82.jar"
 API_SHA256 = "f48c635f1c7469fdec0e00ad2ea0b7a6b2f5b55065784a35b7ca3a84615e8e25"
+SIGNING_CERT_SHA256 = "7afe9d9dda1cbf3ef70d23c29f98a55ef8a9d8a3bda280d98111a410eff31347"
 MANIFEST = ET.parse(MODULE / "AndroidManifest.xml").getroot()
 ANDROID_NS = "{http://schemas.android.com/apk/res/android}"
 VERSION = MANIFEST.attrib[ANDROID_NS + "versionName"]
@@ -30,6 +33,44 @@ RECORDS = []
 def sha256(path):
     with path.open("rb") as source:
         return hashlib.file_digest(source, "sha256").hexdigest()
+
+
+def compilation_inputs():
+    paths = [MODULE / "AndroidManifest.xml"]
+    for folder in ("src", "res", "assets"):
+        paths.extend(path for path in (MODULE / folder).rglob("*") if path.is_file())
+    return {path.relative_to(MODULE).as_posix(): sha256(path) for path in sorted(paths)}
+
+
+def require_matching_inputs(record):
+    if record.get("compilation_inputs") != compilation_inputs():
+        raise ValueError("APK inputs changed or snapshot missing; rebuild instead of refreshing sources")
+
+
+def create_work_directory():
+    parent = MODULE / "build" / VERSION
+    parent.mkdir(parents=True, exist_ok=True)
+    return Path(tempfile.mkdtemp(prefix="run-", dir=parent))
+
+
+def promote_release(staging, release):
+    stem = "storeclean-" + VERSION
+    verification = staging / (stem + "-verification.json")
+    record = json.loads(verification.read_text(encoding="utf-8"))
+    names = {"apk": stem + ".apk", "patch": stem + ".patch", "source_zip": stem + "-source.zip"}
+    # Complete validation precedes any replacement of the previous deliverables.
+    for key, name in names.items():
+        if sha256(staging / name) != record[key + "_sha256"]:
+            raise ValueError("Staged artifact hash mismatch: " + name)
+    release.mkdir(parents=True, exist_ok=True)
+    artifacts = release.parent / "analysis/release_artifacts"
+    artifacts.mkdir(parents=True, exist_ok=True)
+    for name in list(names.values()) + [stem + ".apk.idsig"]:
+        source = staging / name
+        if source.is_file():
+            destination = release if name == names["apk"] else artifacts
+            source.replace(destination / name)
+    verification.replace(artifacts / verification.name)
 
 
 def run(command):
@@ -58,6 +99,12 @@ def preflight():
     if not (MODULE / "signing/storeclean-dev.jks").is_file():
         raise FileNotFoundError("Existing signing key required for compatible release updates")
     ET.parse(MODULE / "res/values/arrays.xml")
+    if MANIFEST.find("application").get(ANDROID_NS + "icon"):
+        for density, size in (("mdpi", 48), ("hdpi", 72), ("xhdpi", 96), ("xxhdpi", 144), ("xxxhdpi", 192)):
+            image = MODULE / "res" / ("mipmap-" + density) / "ic_launcher.png"
+            data = image.read_bytes()
+            assert data.startswith(b"\x89PNG\r\n\x1a\n")
+            assert struct.unpack_from(">II", data, 16) == (size, size), image
     comparisons = json.loads((ROOT / "analysis/comparison.json").read_text(encoding="utf-8"))
     required = {
         "PrefUtils": [
@@ -93,6 +140,10 @@ def preflight():
         launches = re.findall(r"^\.method public final launchOrchard\([^\n]*\)V$", source, re.MULTILINE)
         h5 = re.findall(r"^\.method public final launchOrchardH5[^($]*\$?[^($]*\([^\n]*\)V$", source, re.MULTILINE)
         assert len(launches) >= 5
+        parameters = ["Landroid/app/Activity;", "Ljava/lang/String;", "Ljava/lang/String;", "Ljava/lang/Integer;", "Ljava/util/Map;"]
+        for length in range(1, 6):
+            signature = "launchOrchard(" + "".join(parameters[:length]) + ")V"
+            assert any(method.endswith(" " + signature) for method in launches), signature
         count += len(launches) + len(h5)
         assert count == 29 + len(launches) + len(h5)
         verified.append({"version": version["version"], "mandatory_hook_signatures": count,
@@ -106,29 +157,47 @@ def write_patch(destination):
     for directory in ("src", "tests", "fixtures", "res", "assets"):
         sources.extend(path for path in (MODULE / directory).rglob("*") if path.is_file())
     sources.extend(path for path in (ROOT / "tools").glob("*.py"))
+    sources.extend(path for path in (ROOT / "tools").glob("*.ps1"))
     sources.extend(ROOT / name for name in (
         ".gitignore", "README.md", "CORE_REQUIREMENTS.md", "analysis/REPORT.md", "analysis/RUNTIME_VALIDATION.md",
         "analysis/COMPATIBILITY_1.1.0.md",
+        "analysis/REVIEW_2026-10-15.md",
     ))
     if (MODULE / "README.md").exists():
         sources.append(MODULE / "README.md")
     patch = []
     for path in sorted(sources):
         name = path.relative_to(ROOT).as_posix()
-        patch.extend(difflib.unified_diff([], path.read_text(encoding="utf-8").splitlines(keepends=True), fromfile="/dev/null", tofile="b/" + name))
-    destination.write_text("".join(patch), encoding="utf-8")
-    assert destination.read_text(encoding="utf-8").startswith("--- /dev/null\n")
+        if path.suffix.lower() == ".png":
+            # Native Git emits an applyable binary patch; exit 1 means a difference exists.
+            result = subprocess.run(["git", "diff", "--no-index", "--binary", "--", "/dev/null", name],
+                                    cwd=ROOT, capture_output=True)
+            assert result.returncode == 1 and b"GIT binary patch" in result.stdout
+            patch.append(result.stdout.decode("utf-8"))
+        else:
+            patch.append(f"diff --git a/{name} b/{name}\nnew file mode 100644\n")
+            patch.extend(difflib.unified_diff([], path.read_text(encoding="utf-8").splitlines(keepends=True), fromfile="/dev/null", tofile="b/" + name))
+    destination.write_text("".join(patch), encoding="utf-8", newline="\n")
+    assert destination.read_text(encoding="utf-8").startswith("diff --git ")
     return sources
 
 
 def refresh_sources():
     """Refresh source-only deliverables while preserving the installed, verified APK bytes."""
     release = ROOT / "release"
-    verification = release / ("storeclean-" + VERSION + "-verification.json")
+    verification = ARTIFACTS / ("storeclean-" + VERSION + "-verification.json")
     record = json.loads(verification.read_text(encoding="utf-8"))
     apk = Path(record["apk"])
     assert record["version"] == VERSION and record["version_code"] == VERSION_CODE
     assert sha256(apk) == record["apk_sha256"], "APK changed since build verification"
+    require_matching_inputs(record)
+    for key, suffix in (("patch", ".patch"), ("source_zip", "-source.zip")):
+        path = ARTIFACTS / ("storeclean-" + VERSION + suffix)
+        assert sha256(path) == record[key + "_sha256"], "Archived artifact changed before refresh"
+        if record[key] != str(path):
+            record.setdefault("paths_before_layout_change", {})[key] = record[key]
+        record[key] = str(path)
+    record["artifact_directory"] = str(ARTIFACTS)
     with zipfile.ZipFile(apk) as archive:
         assert archive.testzip() is None
     files = write_patch(Path(record["patch"]))
@@ -144,24 +213,14 @@ def refresh_sources():
     rollback = run([sys.executable, "-X", "utf8", "tools/rollback_module.py"])
     assert "DRY RUN: no device command executed" in rollback["stdout"]
     record["source_refresh_commands"] = RECORDS
-    device = ROOT / "analysis/device_1.1.0"
-    evidence = []
-    for stage in ("before", "upgrade", "after", "settings", "settings-bottom"):
-        path = device / (stage + "-commands.json")
-        if path.is_file():
-            evidence.append({"path": str(path.relative_to(ROOT)), "sha256": sha256(path)})
-    record["device_runtime_evidence"] = {
-        "report": "analysis/COMPATIBILITY_1.1.0.md", "records": evidence,
-        "scope": "Observed on 4.127.11 only; user confirmed entrance/settings; no unknown-version runtime test",
-    }
-    if evidence:
-        record["device_runtime"] = "See separate device evidence and its scoped conclusions; APK bytes preserved"
+    # Preserve this build's runtime status. Never attach an older APK's observations.
     verification.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     assert sha256(apk) == record["apk_sha256"]
-    print("PASS refreshed source ZIP, patch and evidence references; installed APK unchanged")
+    print("PASS refreshed source ZIP and patch; APK bytes and runtime status unchanged")
 
 
 def main():
+    RECORDS.clear()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-inputs", action="store_true")
     parser.add_argument("--refresh-sources", action="store_true", help="Refresh documentation/source artifacts without rebuilding APK")
@@ -172,9 +231,12 @@ def main():
     if args.refresh_sources:
         refresh_sources()
         return
-    work = MODULE / "build" / VERSION
+    input_snapshot = compilation_inputs()
+    run([sys.executable, "-X", "utf8", "tools/test_regressions.py", "-v"])
+    work = create_work_directory()
     release = ROOT / "release"
-    for path in (work, work / "classes", work / "tests", work / "dex", MODULE / "signing", release):
+    staging = work / "release"
+    for path in (work, work / "classes", work / "tests", work / "dex", MODULE / "signing", staging):
         path.mkdir(parents=True, exist_ok=True)
     inventory = json.loads((ROOT / "analysis/inventory.json").read_text(encoding="utf-8"))
     original_hashes = {entry["file"]: sha256(ROOT / entry["file"]) for entry in inventory}
@@ -198,9 +260,11 @@ def main():
             archive.write(path, path.name)
     run([BUILD_TOOLS / "zipalign.exe", "-f", "4", work / "unsigned.apk", work / "aligned.apk"])
     key = MODULE / "signing/storeclean-dev.jks"
-    apk = release / ("storeclean-" + VERSION + ".apk")
+    apk = staging / ("storeclean-" + VERSION + ".apk")
     run(["java", "-jar", BUILD_TOOLS / "lib/apksigner.jar", "sign", "--ks", key, "--ks-key-alias", "storeclean-dev", "--ks-pass", "pass:android", "--key-pass", "pass:android", "--out", apk, work / "aligned.apk"])
     signing = run(["java", "-jar", BUILD_TOOLS / "lib/apksigner.jar", "verify", "--verbose", "--print-certs", apk])
+    cert = re.search(r"Signer #1 certificate SHA-256 digest: ([0-9a-f]+)", signing["stdout"])
+    assert cert and cert[1] == SIGNING_CERT_SHA256, "Unexpected module signing certificate"
     run([BUILD_TOOLS / "zipalign.exe", "-c", "4", apk])
     badging = run([BUILD_TOOLS / "aapt.exe", "dump", "badging", apk])
     assert f"versionCode='{VERSION_CODE}'" in badging["stdout"] and f"versionName='{VERSION}'" in badging["stdout"]
@@ -208,7 +272,10 @@ def main():
     assert all(name in manifest["stdout"] for name in ("xposedmodule", "xposedminversion", "xposedscope"))
     assert "uses-permission" not in manifest["stdout"]
     assert "debuggable(0x0101000f)=(type 0x12)0x0" in manifest["stdout"]
-    predecessor = release / "storeclean-1.0.0.apk"
+    if MANIFEST.find("application").get(ANDROID_NS + "icon"):
+        assert "android:icon" in manifest["stdout"] and "android:roundIcon" in manifest["stdout"]
+        assert badging["stdout"].count("application-icon-") >= 5
+    predecessor = release / ("storeclean-1.1.0.apk" if VERSION == "1.1.1" else "storeclean-1.0.0.apk")
     continuity = {"status": "baseline APK not present"}
     if predecessor.is_file():
         baseline_signing = run(["java", "-jar", BUILD_TOOLS / "lib/apksigner.jar", "verify", "--print-certs", predecessor])
@@ -224,6 +291,9 @@ def main():
         assert archive.read("assets/xposed_init").decode("utf-8").strip() == "io.github.storeclean.StoreHooks"
         assert archive.read("classes.dex").startswith(b"dex\n")
         assert not any("xposed-api" in name or name.endswith(".java") for name in archive.namelist())
+        packaged_icons = [name for name in archive.namelist() if name.endswith("/ic_launcher.png")]
+        if MANIFEST.find("application").get(ANDROID_NS + "icon"):
+            assert len(packaged_icons) == 5
         data = archive.read("classes.dex")
         strings_offset = struct.unpack_from("<I", data, 0x3C)[0]
         types_offset = struct.unpack_from("<I", data, 0x44)[0]
@@ -239,30 +309,34 @@ def main():
             name = data[cursor:data.index(b"\0", cursor)].decode("utf-8")
             assert name.startswith("Lio/github/storeclean/") and "Test;" not in name
             defined_classes.append(name)
-    patch = release / ("storeclean-" + VERSION + ".patch")
+    patch = staging / ("storeclean-" + VERSION + ".patch")
     files = write_patch(patch)
     run(["git", "apply", "--check", "--directory=module/build/patch-check", patch])
     rollback = run([sys.executable, "-X", "utf8", "tools/rollback_module.py"])
     assert "DRY RUN: no device command executed" in rollback["stdout"]
-    source_zip = release / ("storeclean-" + VERSION + "-source.zip")
+    source_zip = staging / ("storeclean-" + VERSION + "-source.zip")
     with zipfile.ZipFile(source_zip, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         for path in files:
             archive.write(path, path.relative_to(ROOT).as_posix())
     with zipfile.ZipFile(source_zip) as archive:
         assert archive.testzip() is None
     assert original_hashes == {name: sha256(ROOT / name) for name in original_hashes}
+    assert compilation_inputs() == input_snapshot, "APK sources changed during the build; rebuild required"
     record = {
         "version": VERSION,
+        "compilation_inputs": input_snapshot,
         "version_code": VERSION_CODE,
         "channel": "release",
         "debuggable": False,
+        "application_icon": MANIFEST.find("application").get(ANDROID_NS + "icon"),
+        "packaged_icons": packaged_icons,
         "predecessor_continuity": continuity,
         "predecessor_runtime_evidence": "analysis/RUNTIME_VALIDATION.md (0.1.0 on app store 4.126.10 only)",
-        "apk": str(apk),
+        "apk": str(release / apk.name),
         "apk_sha256": sha256(apk),
-        "patch": str(patch),
+        "patch": str(ARTIFACTS / patch.name),
         "patch_sha256": sha256(patch),
-        "source_zip": str(source_zip),
+        "source_zip": str(ARTIFACTS / source_zip.name),
         "source_zip_sha256": sha256(source_zip),
         "defined_dex_classes": defined_classes,
         "rollback": {"script": str(ROOT / "tools/rollback_module.py"), "dry_run": "PASS", "device_execution": "NOT TESTED"},
@@ -272,11 +346,13 @@ def main():
         "commands": RECORDS,
         "device_runtime": "NOT TESTED FOR THIS APK; predecessor evidence is recorded separately",
         "fixture_scope": "Production callbacks are tested with explicit host fakes; no Android rendering or real Xposed engine is executed",
+        "artifact_directory": str(ARTIFACTS),
     }
-    verification = release / ("storeclean-" + VERSION + "-verification.json")
+    verification = staging / ("storeclean-" + VERSION + "-verification.json")
     verification.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     assert json.loads(verification.read_text(encoding="utf-8"))["apk_sha256"] == sha256(apk)
-    print(f"BUILT {apk}\nSHA256 {record['apk_sha256']}\nVERIFIED {verification}")
+    promote_release(staging, release)
+    print(f"BUILT {record['apk']}\nSHA256 {record['apk_sha256']}\nVERIFIED {ARTIFACTS / verification.name}")
 
 
 if __name__ == "__main__":

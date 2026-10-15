@@ -90,30 +90,16 @@ public final class StoreHooks implements IXposedHookLoadPackage {
         add(plan, orchard.getDeclaredMethod("isOpen"), constant(false));
         add(plan, orchard.getDeclaredMethod("reopen"), constant(null));
         Class<?> sdk = Class.forName("com.xiaomi.market.incentive.orchard.OrchardSdkHelper", false, loader);
-        int launches = 0;
-        for (Method method : sdk.getDeclaredMethods()) {
-            if (method.getName().equals("launchOrchard")
-                    || (method.getName().startsWith("launchOrchardH5")
-                        && !method.getName().endsWith("$default"))) {
-                requireReturn(method, void.class);
-                if (java.lang.reflect.Modifier.isStatic(method.getModifiers())
-                        || method.getParameterTypes().length == 0
-                        || method.getParameterTypes()[0] != android.app.Activity.class) {
-                    throw new IllegalStateException("Unexpected orchard launch signature: " + method);
-                }
-                add(plan, method, constant(null));
-                if (method.getName().equals("launchOrchard")) {
-                    launches++;
-                }
-            }
-        }
-        if (launches < 5) {
-            throw new IllegalStateException("Expected at least five orchard launch overloads, got " + launches);
+        for (Method method : resolveOrchardMethods(sdk)) {
+            add(plan, method, constant(null));
         }
         Class<?> manager = Class.forName("com.xiaomi.market.util.EntranceManager", false, loader);
         add(plan, manager.getDeclaredMethod("getEntranceConfig"), constant(null));
         add(plan, manager.getDeclaredMethod("needShowAnimation"), constant(false));
         Class<?> entrance = Class.forName("com.xiaomi.market.ui.entrance.EntranceView", false, loader);
+        if (!View.class.isAssignableFrom(entrance)) {
+            throw new IllegalStateException("EntranceView no longer extends View");
+        }
         add(plan, entrance.getDeclaredMethod("bindView", Context.class, String.class),
                 new XC_MethodHook() {
                     @Override
@@ -130,6 +116,8 @@ public final class StoreHooks implements IXposedHookLoadPackage {
         });
 
         Class<?> preference = Class.forName("androidx.preference.Preference", false, loader);
+        requireReturn(preference.getMethod("getKey"), String.class);
+        requireReturn(preference.getMethod("setEnabled", boolean.class), void.class);
         add(plan, preference.getDeclaredMethod("getPersistedBoolean", boolean.class),
                 new XC_MethodHook() {
                     @Override
@@ -162,6 +150,9 @@ public final class StoreHooks implements IXposedHookLoadPackage {
 
         Class<?> fragment = Class.forName(
                 "com.xiaomi.market.business_ui.settings.function.FunctionSettingsFragment", false, loader);
+        if (!preference.isAssignableFrom(fragment.getMethod("findPreference", CharSequence.class).getReturnType())) {
+            throw new IllegalStateException("Unexpected findPreference return type");
+        }
         add(plan, fragment.getDeclaredMethod("onPreferenceChange", preference, Object.class),
                 new XC_MethodHook() {
                     @Override
@@ -186,6 +177,46 @@ public final class StoreHooks implements IXposedHookLoadPackage {
                     }
                 });
         return plan;
+    }
+
+    private static List<Method> resolveOrchardMethods(Class<?> sdk) throws Exception {
+        Class<?>[] prefix = {android.app.Activity.class, String.class, String.class,
+                Integer.class, java.util.Map.class};
+        // Counting five overloads is insufficient: require the five observed canonical signatures.
+        for (int length = 1; length <= prefix.length; length++) {
+            validateOrchardMethod(sdk.getDeclaredMethod("launchOrchard", java.util.Arrays.copyOf(prefix, length)));
+        }
+        List<Method> methods = new ArrayList<>();
+        for (Method method : sdk.getDeclaredMethods()) {
+            if (method.getName().equals("launchOrchard")
+                    || (method.getName().startsWith("launchOrchardH5")
+                        && !method.getName().endsWith("$default"))) {
+                validateOrchardMethod(method);
+                methods.add(method);
+            }
+        }
+        return methods;
+    }
+
+    private static void validateOrchardMethod(Method method) {
+        requireReturn(method, void.class);
+        Class<?>[] parameters = method.getParameterTypes();
+        Class<?>[] prefix = {android.app.Activity.class, String.class, String.class,
+                Integer.class, java.util.Map.class, boolean.class};
+        boolean h5 = method.getName().startsWith("launchOrchardH5");
+        if (java.lang.reflect.Modifier.isStatic(method.getModifiers())
+                || java.lang.reflect.Modifier.isAbstract(method.getModifiers())
+                || parameters.length < 1 || parameters.length > 7 || (h5 && parameters.length != 5)) {
+            throw new IllegalStateException("Unexpected orchard launch signature: " + method);
+        }
+        for (int index = 0; index < Math.min(parameters.length, prefix.length); index++) {
+            if (parameters[index] != prefix[index]) {
+                throw new IllegalStateException("Unexpected orchard launch parameter: " + method);
+            }
+        }
+        if (parameters.length == 7 && (parameters[6].isPrimitive() || parameters[6].isArray())) {
+            throw new IllegalStateException("Unexpected orchard callback type: " + method);
+        }
     }
 
     private static void validateSettingsSchema(Context context) throws Exception {
@@ -273,6 +304,13 @@ public final class StoreHooks implements IXposedHookLoadPackage {
 
     private static void add(List<Binding> plan, Method method, XC_MethodHook callback) {
         String name = method.getName();
+        boolean staticUtility = method.getDeclaringClass().getName().equals("com.xiaomi.market.util.PrefUtils")
+                || method.getDeclaringClass().getName().equals("com.xiaomi.market.util.SettingsUtils")
+                || method.getDeclaringClass().getName().equals("com.xiaomi.market.util.OrchardEntranceManager");
+        if (java.lang.reflect.Modifier.isStatic(method.getModifiers()) != staticUtility
+                || java.lang.reflect.Modifier.isAbstract(method.getModifiers())) {
+            throw new IllegalStateException("Unexpected hook dispatch type: " + method);
+        }
         if (name.equals("getEntranceConfig")) {
             if (!method.getReturnType().getName().equals("com.xiaomi.market.util.EntranceConfig")) {
                 throw new IllegalStateException("Unexpected entrance config type: " + method);

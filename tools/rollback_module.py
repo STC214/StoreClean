@@ -40,8 +40,8 @@ def main():
             raise RuntimeError(records[-1])
         if "uninstall" in command and result.stdout.strip() != "Success":
             raise RuntimeError("Uninstall did not report Success")
-    directory = ROOT / "release"
-    directory.mkdir(exist_ok=True)
+    directory = ROOT / "analysis/release_artifacts"
+    directory.mkdir(parents=True, exist_ok=True)
     (directory / "rollback-device-verification.json").write_text(json.dumps(records, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 

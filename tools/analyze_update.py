@@ -17,6 +17,16 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def validate_evidence_destination(directory):
+    directory = directory.resolve()
+    base = (ROOT / "analysis").resolve()
+    directory.relative_to(base)
+    if directory == base:
+        raise ValueError("Use a dedicated analysis subdirectory")
+    if directory.exists() and any(directory.iterdir()) and not (directory / "input.apk").is_file():
+        raise ValueError("Nonempty evidence directory has no bound input.apk")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apk", type=Path, required=True)
@@ -26,6 +36,7 @@ def main():
     directory = args.directory.resolve()
     apk.relative_to(ROOT)
     directory.relative_to(ROOT)
+    validate_evidence_destination(directory)
     inventory_path = ROOT / "analysis/inventory.json"
     inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
     original = digest(apk)
@@ -96,6 +107,7 @@ def main():
               "baseline_directory": str(baseline.relative_to(ROOT)), "schemas_equal": True,
               "settings": settings, "classes": differences, "scope": "static evidence; not runtime verification"}
     (ROOT / "analysis/update_comparison.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (directory / "update_comparison.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("PASS: sample appended, originals unchanged, settings schema matches; class differences recorded")
 
 

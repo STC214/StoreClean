@@ -1,4 +1,4 @@
-# StoreClean 1.1.0 正式版
+# StoreClean 1.1.1 正式版
 
 LSP / LSPosed 模块，包名 `io.github.storeclean`，作用域仅为小米应用商店 `com.xiaomi.market`。
 
@@ -27,14 +27,14 @@ LSP / LSPosed 模块，包名 `io.github.storeclean`，作用域仅为小米应�
 
 ## 安装与真机验收
 
-1. 安装 `release/storeclean-1.1.0.apk`；已安装同签名的 0.1.0 / 1.0.0 时可直接覆盖更新。
+1. 安装 `release/storeclean-1.1.1.apk`；已安装同签名的旧模块时可直接覆盖更新。
 2. 在 LSPosed 管理器启用 **StoreClean 应用商店精简**，作用域仅勾选 **应用商店**。
 3. 结束应用商店进程后重新打开，使新版本 Hook 生效；必要时重启设备。
 4. 检查 LSPosed 日志中 `[StoreClean] active version=... hooks=...`，同时确认 `profile=registered` 或 `profile=structural` 和 `schema=16`；出现 `unsupported version` 或 `initialization aborted` 时，保留日志供定位。
 5. 检查左侧活动图标不显示，活动跳转被阻断，全部菜单开关符合项目需求；每个应用版本单独验收。
 6. 检查搜索、下载、安装、更新正常，安全检测保持原行为。
 
-正式版 versionCode 为 3，显式设置 `debuggable=false`，无启动器图标和配置界面。为支持直接覆盖更新，沿用现有项目签名（密钥文件名和证书开发标识保留，不伪称为新签名）；请妥善保管密钥，本发行包适用于本项目现有部署，不表示已完成公开分发的密钥治理。
+正式版 versionCode 为 4，显式设置 `debuggable=false`。应用图标显示于 LSPosed 模块列表与系统应用信息；仍无桌面启动入口和配置界面。为支持直接覆盖更新，沿用现有项目签名（密钥文件名和证书开发标识保留，不伪称为新签名）；请妥善保管密钥，本发行包适用于本项目现有部署，不表示已完成公开分发的密钥治理。
 
 2026-10-01，0.1.0 在应用商店 4.126.10 上已获用户确认：活动图标视觉正常屏蔽，受控开关开闭正确且不可操作；主进程日志确认 34 个 Hook 注册成功，所检查日志未见模块初始化错误，崩溃缓冲区为空。详见 `analysis/RUNTIME_VALIDATION.md`。
 
@@ -56,7 +56,7 @@ python -X utf8 tools/rollback_module.py
 python -X utf8 tools/rollback_module.py --serial SERIAL --apply
 ```
 
-将 `SERIAL` 换为实际设备序列号。脚本只卸载 `io.github.storeclean` 并结束 `com.xiaomi.market` 进程，不卸载应用商店、不清除其数据。设备回退结果另存为 `release/rollback-device-verification.json`。
+将 `SERIAL` 换为实际设备序列号。脚本只卸载 `io.github.storeclean` 并结束 `com.xiaomi.market` 进程，不卸载应用商店、不清除其数据。设备回退结果另存为 `analysis/release_artifacts/rollback-device-verification.json`。
 
 回退脚本目前仅验证了预览路径；运行时回退效果仍待真机验证。
 
@@ -73,7 +73,25 @@ python -X utf8 tools/build_module.py
 
 输出：APK、新增源码 patch、源码 ZIP、逐命令验证 JSON。策略 fixture 验证了基线值、启用覆盖、排除项、存储不变与恢复基线；生产代码回调还通过了明确使用 host fake 的调用测试，覆盖受控读取/写入、排除项放行及入口隐藏/点击清除。它们不运行 Android 页面或真正的 Xposed 引擎，fake 类不进入 APK。
 
-发行产物为 `release/storeclean-1.1.0.apk`、`release/storeclean-1.1.0.patch`、`release/storeclean-1.1.0-source.zip` 和 `release/storeclean-1.1.0-verification.json`。1.0.0 保留作签名升级基线；1.1.0 的 DEX 因适配而改变，不再要求字节相同。0.1.0 旧发行文件已清理，历史真机记录保留；设备升级前的模块备份单独保存在本地分析目录。
+`release/` 仅存放 `storeclean-1.1.1.apk`。源码、补丁、验证 JSON 与当前 `.idsig` 均在 `analysis/release_artifacts/`：`storeclean-1.1.1-source.zip`、`storeclean-1.1.1.patch`、`storeclean-1.1.1-verification.json`、`storeclean-1.1.1.apk.idsig`。历史源码和验证记录保留，旧成品 APK 已清理。1.1.1 的固定开关策略和入口阻断目标不变，但复审补强了结构校验，因此 DEX 与 1.1.0 不再相同。签名证书指纹始终独立校验，不依赖旧 APK 存在。
+
+构建使用独立空目录，验证全部暂存产物后再替换发行文件，防止旧 class 混入与已知验证失败覆盖成品。`--refresh-sources` 仅在编译输入哈希与原构建一致时刷新源码/文档；不会把旧版设备结果写成新版实测。设备检查默认使用清单当前版本，每次输出到 `analysis/device_checks/` 的独立会话目录，不覆盖旧证据。
+
+当前验证 JSON 的产物字段已按新布局更新；历史版本 JSON 和命令输出保留当时的路径，不表示历史 APK 仍存在。目录整理与源码刷新不重建、也不改变当前 APK。
+
+离线复审：`python -X utf8 tools/review_project.py`；完整检查范围见 `analysis/REVIEW_2026-10-15.md`。成品清理先运行 `powershell.exe -NoProfile -File tools/clean_release.ps1` 预览，确认目标后再传 `-Apply`。不自动删除历史源码归档或原应用样本。
+
+### 1.1.1 图标更新
+
+使用本机 System.Drawing 裁剪与缩放，不调用图像生成服务。根目录 `icon.png` 原件保持不变，从上半部取 `(112, 0, 608, 608)` 的正方形头肩区域；主图位于 `module/res/drawable-nodpi/icon_portrait.png`，五档图标位于 `module/res/mipmap-*/ic_launcher.png`（48/72/96/144/192 像素）。清单通过 `android:icon` 和 `android:roundIcon` 引用图标。
+
+本地重制（需要原始 `icon.png` 与 Windows PowerShell）：
+
+```text
+powershell.exe -NoProfile -File tools/build_icon.ps1
+```
+
+源码归档包含裁剪后的图标与脚本，不包含原始 `icon.png`；普通构建直接使用已有图标资源，不需要重新裁剪。1.1.1 尚未安装到手机，管理器和系统应用信息中的实际图标显示仍待设备检查。
 
 新增 APK 时使用 `tools/analyze_update.py --apk APK_PATH --directory analysis/apk_N` 追加证据，不重排旧样本；随后运行版本比较和构建检查。`tools/check_device.py` 记录明确指定设备的基线/升级/观察命令；只有 `--stage upgrade` 安装模块并结束后重开应用商店，其他设置观察阶段会导航页面。不要把这些命令当作无交互的日志读取。
 
