@@ -8,7 +8,7 @@
         "tools/compare_apks.py"
       ],
       "exit_code": 0,
-      "stdout": "4.126.10 (40007640): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n4.126.s.1 (40007621): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n4.126.s.2 (40007622): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n{\"category\": \"导航栏管理\", \"title\": \"视频专区\", \"key\": \"pref_key_short_play\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"活动专题页\", \"key\": \"pref_key_h5_topic\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"软件-全球上网\", \"key\": \"pref_key_global_net\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"软件-快应用\", \"key\": \"pref_key_quick_app\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"自动生成云游戏桌面图标\", \"key\": \"pref_key_cloud_game_icon\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"显示游戏抽奖\", \"key\": \"pref_key_support_game_lottery\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"小游戏服务\", \"key\": \"pref_key_mini_game\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"显示首页最近使用的小程序\", \"key\": \"pref_key_mini_program_switch\", \"required\": false}\n{\"category\": \"我的页功能管理\", \"title\": \"手机清理功能\", \"key\": \"pref_key_phone_clean\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"开启应用安全检测\", \"key\": \"pref_key_app_security_check\", \"required\": null}\n{\"category\": \"我的页功能管理\", \"title\": \"应用锁\", \"key\": \"pref_key_app_lock\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"权限管理\", \"key\": \"pref_key_permission_management\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"互联升级\", \"key\": \"pref_key_milink_service\", \"required\": true}\n{\"category\": \"其他功能管理\", \"title\": \"显示福利活动\", \"key\": \"pref_key_need_welfare\", \"required\": false}\n{\"category\": \"其他功能管理\", \"title\": \"未成年人模式\", \"key\": \"pref_key_child_mode_setting\", \"required\": false}\n{\"category\": \"其他功能管理\", \"title\": \"果园入口\", \"key\": \"pref_key_orchard\", \"required\": false}\n",
+      "stdout": "4.126.10 (40007640): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n4.126.s.1 (40007621): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n4.126.s.2 (40007622): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n4.127.11 (40007661): original/copy SHA-256 PASS; 16 settings; 15 getter candidates PASS\n{\"category\": \"导航栏管理\", \"title\": \"视频专区\", \"key\": \"pref_key_short_play\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"活动专题页\", \"key\": \"pref_key_h5_topic\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"软件-全球上网\", \"key\": \"pref_key_global_net\", \"required\": false}\n{\"category\": \"导航栏管理\", \"title\": \"软件-快应用\", \"key\": \"pref_key_quick_app\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"自动生成云游戏桌面图标\", \"key\": \"pref_key_cloud_game_icon\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"显示游戏抽奖\", \"key\": \"pref_key_support_game_lottery\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"小游戏服务\", \"key\": \"pref_key_mini_game\", \"required\": false}\n{\"category\": \"游戏服务管理\", \"title\": \"显示首页最近使用的小程序\", \"key\": \"pref_key_mini_program_switch\", \"required\": false}\n{\"category\": \"我的页功能管理\", \"title\": \"手机清理功能\", \"key\": \"pref_key_phone_clean\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"开启应用安全检测\", \"key\": \"pref_key_app_security_check\", \"required\": null}\n{\"category\": \"我的页功能管理\", \"title\": \"应用锁\", \"key\": \"pref_key_app_lock\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"权限管理\", \"key\": \"pref_key_permission_management\", \"required\": true}\n{\"category\": \"我的页功能管理\", \"title\": \"互联升级\", \"key\": \"pref_key_milink_service\", \"required\": true}\n{\"category\": \"其他功能管理\", \"title\": \"显示福利活动\", \"key\": \"pref_key_need_welfare\", \"required\": false}\n{\"category\": \"其他功能管理\", \"title\": \"未成年人模式\", \"key\": \"pref_key_child_mode_setting\", \"required\": false}\n{\"category\": \"其他功能管理\", \"title\": \"果园入口\", \"key\": \"pref_key_orchard\", \"required\": false}\n",
       "stderr": ""
     },
     {
@@ -45,6 +45,19 @@
         "verify",
         "--print-certs",
         "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_3\\input.apk"
+      ],
+      "exit_code": 0,
+      "stdout": "Signer #1 certificate DN: EMAILADDRESS=miui@xiaomi.com, CN=MIUI, OU=MIUI, O=Xiaomi, L=Beijing, ST=Beijing, C=CN\nSigner #1 certificate SHA-256 digest: c9009d01ebf9f5d0302bc71b2fe9aa9a47a432bba17308a3111b75d7b2149025\nSigner #1 certificate SHA-1 digest: 7b6dc7079c34739ce81159719fb5eb61d2a03225\nSigner #1 certificate MD5 digest: 701478a1e3b4b7e3978ea69469410f13\n",
+      "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+    },
+    {
+      "command": [
+        "java",
+        "-jar",
+        "F:/Android/Sdk/build-tools/36.1.0/lib/apksigner.jar",
+        "verify",
+        "--print-certs",
+        "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
       ],
       "exit_code": 0,
       "stdout": "Signer #1 certificate DN: EMAILADDRESS=miui@xiaomi.com, CN=MIUI, OU=MIUI, O=Xiaomi, L=Beijing, ST=Beijing, C=CN\nSigner #1 certificate SHA-256 digest: c9009d01ebf9f5d0302bc71b2fe9aa9a47a432bba17308a3111b75d7b2149025\nSigner #1 certificate SHA-1 digest: 7b6dc7079c34739ce81159719fb5eb61d2a03225\nSigner #1 certificate MD5 digest: 701478a1e3b4b7e3978ea69469410f13\n",
@@ -114,6 +127,27 @@
       "PrefUtils.smali": "19e7335e16a163fe606f9d56eafc335082c87d630d27cd50ea3db8fc4bef42ee",
       "SettingsUtils.smali": "91f97e47ffa00781bf4344d9014780c67daf92c920424fb14d1322b90902f04e",
       "TwoStatePreference.smali": "cd5ac2ee36bfe338ec238a73fdf7c37643497eeb60f124c4c49e74590561ddef"
+    },
+    "apk_4": {
+      "DoubleTabProxyActivityWrapper.smali": "252089830614d8e80b866de8da61120ccff64a3a59469f2b60924b03896db618",
+      "EntranceConfig.smali": "5bca84430e5eae46b9ccd791cdf90dfeefc26d0dcc6671bd34e8cc995aac7bad",
+      "EntranceManager.smali": "e4f1ec3e05d930410bb024dbaa35e888c878fcda766e8ece316e7612853aa904",
+      "EntranceView.smali": "ca98cb59664fa38779d09fc4e515bee74bdc05307594f032ec152c3a05e5bed4",
+      "FunctionSettingsFragment.smali": "eaa0dc3d92f3f14662ff032fd20133f4bc0a062e5648fdb6ba3ed1883e805176",
+      "HomeFeatureTabFragment.smali": "817ede2e0bcf0956db4c82949e651cb47ec3690652524f1dfc7f40491ee19afb",
+      "IncentiveRouter.smali": "7c6237129f5d56ebfb49969c9f0a67f3e0d41614d3349bff81ebc13cbe0f2132",
+      "IncentiveSDKHelper.smali": "cb48db083e3ea5522727aa8c9455fdedc29c1fb1d45c68dcc5dd67cecec496f7",
+      "MainSearchContainer.smali": "e02b12bb5a4a12c46027e9d0cfe3b2b9c455802f09be3981a7831513c4e2cd3c",
+      "MarketTabActivity.smali": "086ea87b16ce21bca110fe42045d3d4c983d4df9fb21436fc160e5ff8275c477",
+      "NativeHomePagePagerFragment.smali": "5a72505b1711f46d62b74aa4f0f4720662d51e6602c85178830844cbebf73f26",
+      "OrchardEntranceManager.smali": "be7d619322962a2b86a3d7e9ada67965f3bd034a480790909999cf9b2d3ec96d",
+      "OrchardSdkHelper.smali": "567a079241f67756020d34184cb83f52abd682aa575955c5ac09d3feeca263a8",
+      "PageConfig.smali": "4882617d590a18f343e986fe33d50c2020096130d84cc53a25f3d1cba968bc95",
+      "Preference.smali": "f9c423f99318397cd1bd48b11d438bdfb60c6124a8152b7b4acdcc389373b956",
+      "PreferenceHelperKt.smali": "c1978007de2ed088e24a53659da6a44ba16a5ec4a9764ee3de40624f2724ddd6",
+      "PrefUtils.smali": "2ff35248c34bc6435ac884a52c0c501941fb39b717e3ac92dbb74d48f8fc5e66",
+      "SettingsUtils.smali": "b6b431d985b0a06de3a0a8be9fab4c00496e5195fd84da640175cd17fbf1b76a",
+      "TwoStatePreference.smali": "d2c7750746cc1b79f8a637981ee633e2076cda31bd2b46399a3b9c710e5a3af7"
     }
   },
   "s1_s2_collected_classes_identical": true,

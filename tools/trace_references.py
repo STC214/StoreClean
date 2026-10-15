@@ -1,6 +1,7 @@
 """Locate caller evidence without full third-party decompilation."""
 
 import json
+import argparse
 import re
 import subprocess
 import zipfile
@@ -13,9 +14,14 @@ TARGETS = re.compile(r"OrchardEntranceManager;?\.(?:isOpen|close|reopen)|Setting
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--directory", help="Limit tracing to one inventory analysis directory")
+    args = parser.parse_args()
     entries = json.loads((ROOT / "analysis/inventory.json").read_text(encoding="utf-8"))
     for entry in entries:
         directory = ROOT / entry["analysis_directory"]
+        if args.directory and directory.name != args.directory:
+            continue
         references = []
         commands = []
         with zipfile.ZipFile(ROOT / entry["copy"]) as archive:

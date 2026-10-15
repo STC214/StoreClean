@@ -21,6 +21,13 @@
       "settings_count": 16,
       "getters_present": 15,
       "security_check_excluded": "PASS"
+    },
+    {
+      "version": "4.127.11",
+      "original_and_copy_hash": "PASS",
+      "settings_count": 16,
+      "getters_present": 15,
+      "security_check_excluded": "PASS"
     }
   ],
   "schemas_equal": true,

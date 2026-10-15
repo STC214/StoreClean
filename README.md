@@ -2,6 +2,8 @@
 
 StoreClean 是一个面向 Android 应用商店的 LSPosed 模块。项目目标、受控设置及详细验收条件见 [`CORE_REQUIREMENTS.md`](CORE_REQUIREMENTS.md)；APK 静态分析与运行记录见 [`analysis/REPORT.md`](analysis/REPORT.md) 和 [`analysis/RUNTIME_VALIDATION.md`](analysis/RUNTIME_VALIDATION.md)。
 
+当前正式版 **1.1.0**：屏蔽小米应用商店左侧水果活动入口，固定 15 个功能设置开关；安全检测开关保持原逻辑。已登记 4.126.10、4.126.s.1、4.126.s.2、4.127.11；未登记 4.x 版本只在完整结构检查通过后尝试启用。2026-10-15 已在 4.127.11 上覆盖安装，并确认入口消失、开关正常；新旧差异及验证边界见 [`analysis/COMPATIBILITY_1.1.0.md`](analysis/COMPATIBILITY_1.1.0.md)。
+
 ## 项目结构
 
 - `module/`：模块源码、Android 清单、资源、fixture 与 JVM 测试；模块使用说明见 [`module/README.md`](module/README.md)。

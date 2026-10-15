@@ -53,7 +53,7 @@ def preflight():
         if not path.is_file():
             raise FileNotFoundError(path)
     assert sha256(API) == API_SHA256, "Compile-only API dependency hash mismatch"
-    assert VERSION == "1.0.0" and VERSION_CODE == 2
+    assert re.fullmatch(r"\d+\.\d+\.\d+", VERSION) and VERSION_CODE > 0
     assert MANIFEST.find("application").get(ANDROID_NS + "debuggable") == "false"
     if not (MODULE / "signing/storeclean-dev.jks").is_file():
         raise FileNotFoundError("Existing signing key required for compatible release updates")
@@ -91,11 +91,13 @@ def preflight():
             count += 1
         source = (directory / "OrchardSdkHelper.smali").read_text(encoding="utf-8")
         launches = re.findall(r"^\.method public final launchOrchard\([^\n]*\)V$", source, re.MULTILINE)
-        assert len(launches) == 5
-        count += len(launches)
-        assert count == 34
-        verified.append({"version": version["version"], "mandatory_hook_signatures": count, "status": "PASS"})
-    print("PASS preflight: all 34 mandatory hook signatures exist in all three APK versions")
+        h5 = re.findall(r"^\.method public final launchOrchardH5[^($]*\$?[^($]*\([^\n]*\)V$", source, re.MULTILINE)
+        assert len(launches) >= 5
+        count += len(launches) + len(h5)
+        assert count == 29 + len(launches) + len(h5)
+        verified.append({"version": version["version"], "mandatory_hook_signatures": count,
+                         "orchard_launches": len(launches), "h5_launches": len(h5), "status": "PASS"})
+    print(f"PASS preflight: complete hook signatures exist in all {len(verified)} APK versions")
     return verified
 
 
@@ -105,7 +107,8 @@ def write_patch(destination):
         sources.extend(path for path in (MODULE / directory).rglob("*") if path.is_file())
     sources.extend(path for path in (ROOT / "tools").glob("*.py"))
     sources.extend(ROOT / name for name in (
-        ".gitignore", "CORE_REQUIREMENTS.md", "analysis/REPORT.md", "analysis/RUNTIME_VALIDATION.md",
+        ".gitignore", "README.md", "CORE_REQUIREMENTS.md", "analysis/REPORT.md", "analysis/RUNTIME_VALIDATION.md",
+        "analysis/COMPATIBILITY_1.1.0.md",
     ))
     if (MODULE / "README.md").exists():
         sources.append(MODULE / "README.md")
@@ -118,12 +121,56 @@ def write_patch(destination):
     return sources
 
 
+def refresh_sources():
+    """Refresh source-only deliverables while preserving the installed, verified APK bytes."""
+    release = ROOT / "release"
+    verification = release / ("storeclean-" + VERSION + "-verification.json")
+    record = json.loads(verification.read_text(encoding="utf-8"))
+    apk = Path(record["apk"])
+    assert record["version"] == VERSION and record["version_code"] == VERSION_CODE
+    assert sha256(apk) == record["apk_sha256"], "APK changed since build verification"
+    with zipfile.ZipFile(apk) as archive:
+        assert archive.testzip() is None
+    files = write_patch(Path(record["patch"]))
+    run(["git", "apply", "--check", "--directory=module/build/patch-check", record["patch"]])
+    with zipfile.ZipFile(record["source_zip"], "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for path in files:
+            archive.write(path, path.relative_to(ROOT).as_posix())
+    with zipfile.ZipFile(record["source_zip"]) as archive:
+        assert archive.testzip() is None
+        assert all(archive.read(path.relative_to(ROOT).as_posix()) == path.read_bytes() for path in files)
+    record["patch_sha256"] = sha256(Path(record["patch"]))
+    record["source_zip_sha256"] = sha256(Path(record["source_zip"]))
+    rollback = run([sys.executable, "-X", "utf8", "tools/rollback_module.py"])
+    assert "DRY RUN: no device command executed" in rollback["stdout"]
+    record["source_refresh_commands"] = RECORDS
+    device = ROOT / "analysis/device_1.1.0"
+    evidence = []
+    for stage in ("before", "upgrade", "after", "settings", "settings-bottom"):
+        path = device / (stage + "-commands.json")
+        if path.is_file():
+            evidence.append({"path": str(path.relative_to(ROOT)), "sha256": sha256(path)})
+    record["device_runtime_evidence"] = {
+        "report": "analysis/COMPATIBILITY_1.1.0.md", "records": evidence,
+        "scope": "Observed on 4.127.11 only; user confirmed entrance/settings; no unknown-version runtime test",
+    }
+    if evidence:
+        record["device_runtime"] = "See separate device evidence and its scoped conclusions; APK bytes preserved"
+    verification.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    assert sha256(apk) == record["apk_sha256"]
+    print("PASS refreshed source ZIP, patch and evidence references; installed APK unchanged")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-inputs", action="store_true")
+    parser.add_argument("--refresh-sources", action="store_true", help="Refresh documentation/source artifacts without rebuilding APK")
     args = parser.parse_args()
     targets = preflight()
     if args.check_inputs:
+        return
+    if args.refresh_sources:
+        refresh_sources()
         return
     work = MODULE / "build" / VERSION
     release = ROOT / "release"
@@ -156,12 +203,12 @@ def main():
     signing = run(["java", "-jar", BUILD_TOOLS / "lib/apksigner.jar", "verify", "--verbose", "--print-certs", apk])
     run([BUILD_TOOLS / "zipalign.exe", "-c", "4", apk])
     badging = run([BUILD_TOOLS / "aapt.exe", "dump", "badging", apk])
-    assert "versionCode='2'" in badging["stdout"] and "versionName='1.0.0'" in badging["stdout"]
+    assert f"versionCode='{VERSION_CODE}'" in badging["stdout"] and f"versionName='{VERSION}'" in badging["stdout"]
     manifest = run([BUILD_TOOLS / "aapt.exe", "dump", "xmltree", apk, "AndroidManifest.xml"])
     assert all(name in manifest["stdout"] for name in ("xposedmodule", "xposedminversion", "xposedscope"))
     assert "uses-permission" not in manifest["stdout"]
     assert "debuggable(0x0101000f)=(type 0x12)0x0" in manifest["stdout"]
-    predecessor = release / "storeclean-0.1.0.apk"
+    predecessor = release / "storeclean-1.0.0.apk"
     continuity = {"status": "baseline APK not present"}
     if predecessor.is_file():
         baseline_signing = run(["java", "-jar", BUILD_TOOLS / "lib/apksigner.jar", "verify", "--print-certs", predecessor])
@@ -169,9 +216,9 @@ def main():
         cert = re.search(cert_pattern, signing["stdout"]).group(1)
         assert cert == re.search(cert_pattern, baseline_signing["stdout"]).group(1)
         with zipfile.ZipFile(predecessor) as old, zipfile.ZipFile(apk) as new:
-            assert old.read("classes.dex") == new.read("classes.dex"), "Release hook bytecode changed"
+            identical_dex = old.read("classes.dex") == new.read("classes.dex")
         continuity = {"status": "PASS", "baseline_sha256": sha256(predecessor), "same_signing_certificate": cert,
-                      "identical_classes_dex": True}
+                      "identical_classes_dex": identical_dex}
     with zipfile.ZipFile(apk) as archive:
         assert archive.testzip() is None
         assert archive.read("assets/xposed_init").decode("utf-8").strip() == "io.github.storeclean.StoreHooks"

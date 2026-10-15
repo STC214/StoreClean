@@ -585,6 +585,201 @@
           ]
         }
       }
+    },
+    {
+      "version": "4.127.11",
+      "version_code": 40007661,
+      "sha256": "1ac3be37cf56b29f417278903bca831e1623662e663b86b901316fae6fcebd10",
+      "directory": "analysis\\apk_4",
+      "settings": [
+        {
+          "category": "导航栏管理",
+          "title": "视频专区",
+          "key": "pref_key_short_play",
+          "required": false
+        },
+        {
+          "category": "导航栏管理",
+          "title": "活动专题页",
+          "key": "pref_key_h5_topic",
+          "required": false
+        },
+        {
+          "category": "导航栏管理",
+          "title": "软件-全球上网",
+          "key": "pref_key_global_net",
+          "required": false
+        },
+        {
+          "category": "导航栏管理",
+          "title": "软件-快应用",
+          "key": "pref_key_quick_app",
+          "required": false
+        },
+        {
+          "category": "游戏服务管理",
+          "title": "自动生成云游戏桌面图标",
+          "key": "pref_key_cloud_game_icon",
+          "required": false
+        },
+        {
+          "category": "游戏服务管理",
+          "title": "显示游戏抽奖",
+          "key": "pref_key_support_game_lottery",
+          "required": false
+        },
+        {
+          "category": "游戏服务管理",
+          "title": "小游戏服务",
+          "key": "pref_key_mini_game",
+          "required": false
+        },
+        {
+          "category": "游戏服务管理",
+          "title": "显示首页最近使用的小程序",
+          "key": "pref_key_mini_program_switch",
+          "required": false
+        },
+        {
+          "category": "我的页功能管理",
+          "title": "手机清理功能",
+          "key": "pref_key_phone_clean",
+          "required": true
+        },
+        {
+          "category": "我的页功能管理",
+          "title": "开启应用安全检测",
+          "key": "pref_key_app_security_check",
+          "required": null
+        },
+        {
+          "category": "我的页功能管理",
+          "title": "应用锁",
+          "key": "pref_key_app_lock",
+          "required": true
+        },
+        {
+          "category": "我的页功能管理",
+          "title": "权限管理",
+          "key": "pref_key_permission_management",
+          "required": true
+        },
+        {
+          "category": "我的页功能管理",
+          "title": "互联升级",
+          "key": "pref_key_milink_service",
+          "required": true
+        },
+        {
+          "category": "其他功能管理",
+          "title": "显示福利活动",
+          "key": "pref_key_need_welfare",
+          "required": false
+        },
+        {
+          "category": "其他功能管理",
+          "title": "未成年人模式",
+          "key": "pref_key_child_mode_setting",
+          "required": false
+        },
+        {
+          "category": "其他功能管理",
+          "title": "果园入口",
+          "key": "pref_key_orchard",
+          "required": false
+        }
+      ],
+      "getter_candidates": {
+        "isH5TopicEnabled": {
+          "required_return": false,
+          "strings": [
+            "pref_key_h5_topic"
+          ]
+        },
+        "isGlobalNetEnabled": {
+          "required_return": false,
+          "strings": [
+            "pref_key_global_net"
+          ]
+        },
+        "isQuickAppEnabled": {
+          "required_return": false,
+          "strings": [
+            "pref_key_quick_app"
+          ]
+        },
+        "needAutoAddCloudGameIcon": {
+          "required_return": false,
+          "strings": [
+            "pref_key_cloud_game_icon"
+          ]
+        },
+        "needAutoAddCloudGameIconForCloud": {
+          "required_return": false,
+          "strings": []
+        },
+        "supportGameLottery": {
+          "required_return": false,
+          "strings": [
+            "pref_key_support_game_lottery"
+          ]
+        },
+        "isQuickAppGameEnabled": {
+          "required_return": false,
+          "strings": [
+            "pref_key_mini_game"
+          ]
+        },
+        "isMiniProgramRevisitEnabled": {
+          "required_return": false,
+          "strings": [
+            "pref_key_mini_program_switch"
+          ]
+        },
+        "needBlockWelfare": {
+          "required_return": true,
+          "strings": [
+            "pref_key_need_welfare"
+          ]
+        },
+        "isChildModeSettingCheck": {
+          "required_return": false,
+          "strings": [
+            "pref_key_child_mode_setting"
+          ]
+        },
+        "isOrchardEnabled": {
+          "required_return": false,
+          "strings": [
+            "pref_key_orchard"
+          ]
+        },
+        "needPhoneClean": {
+          "required_return": true,
+          "strings": [
+            "pref_key_phone_clean"
+          ]
+        },
+        "isAppLockCheck": {
+          "required_return": true,
+          "strings": [
+            "appLock",
+            "pref_key_app_lock"
+          ]
+        },
+        "isPermissionManagementCheck": {
+          "required_return": true,
+          "strings": [
+            "pref_key_permission_management"
+          ]
+        },
+        "isMilinkServiceCheck": {
+          "required_return": true,
+          "strings": [
+            "pref_key_milink_service"
+          ]
+        }
+      }
     }
   ]
 }

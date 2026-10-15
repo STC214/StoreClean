@@ -220,5 +220,456 @@
       }
     ],
     "dex_hits": 2381
+  },
+  {
+    "file": "store_apk\\device_4.127.11\\com.xiaomi.market\\base.apk",
+    "analysis_directory": "analysis\\apk_4",
+    "copy": "analysis\\apk_4\\input.apk",
+    "bytes": 64548165,
+    "sha256": "1ac3be37cf56b29f417278903bca831e1623662e663b86b901316fae6fcebd10",
+    "unchanged": true,
+    "zip_integrity": "passed",
+    "dex": [
+      {
+        "name": "classes.dex",
+        "sha256": "07d09e4ee6d3f526cd4ce7d3cc2b7c6d0e4b50ec8d0e5f30dc0020fcac2739ca",
+        "strings": 92015
+      },
+      {
+        "name": "classes2.dex",
+        "sha256": "5e20a2dfeb8e4dcca7922b5ee00c47161e39ff00149328c9dffb617863a19fdd",
+        "strings": 2021
+      },
+      {
+        "name": "classes3.dex",
+        "sha256": "bd74725b788a619cc44c10ff664e6e833206d105dfc9dac3f612da0941407cc1",
+        "strings": 51768
+      },
+      {
+        "name": "classes4.dex",
+        "sha256": "334d4806c585571874111623d50a58dd43582085e5df6c7070b80dec8dd5daa4",
+        "strings": 87088
+      },
+      {
+        "name": "classes5.dex",
+        "sha256": "86f06f151c17d65aa29a8204a11969a974c5767754331ed4bcdc94e9d294cb0f",
+        "strings": 70281
+      },
+      {
+        "name": "classes6.dex",
+        "sha256": "0ad4b0a9f03be1662cd22e4dc5b31c949bd006132a3dea33bf7e70820d8fcbd4",
+        "strings": 71938
+      }
+    ],
+    "commands": [
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "badging",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\badging.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "--values",
+          "resources",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\resources.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "xmltree",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk",
+          "AndroidManifest.xml"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\manifest.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "java",
+          "-jar",
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\lib\\apksigner.jar",
+          "verify",
+          "--verbose",
+          "--print-certs",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\signature.txt",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.business_ui.settings.function.FunctionSettingsFragment",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\FunctionSettingsFragment.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.business_ui.settings.PreferenceHelperKt",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\PreferenceHelperKt.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.util.SettingsUtils",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\SettingsUtils.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.util.OrchardEntranceManager",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\OrchardEntranceManager.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.util.PrefUtils",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\PrefUtils.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.model.PageConfig",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\PageConfig.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.incentive.orchard.OrchardSdkHelper",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\OrchardSdkHelper.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.incentive.IncentiveSDKHelper",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\IncentiveSDKHelper.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.incentive.IncentiveRouter",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\IncentiveRouter.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.business_ui.main.MarketTabActivity",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\MarketTabActivity.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.business_ui.main.home.NativeHomePagePagerFragment",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\NativeHomePagePagerFragment.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.business_ui.main.home.HomeFeatureTabFragment",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\HomeFeatureTabFragment.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.widget.MainSearchContainer",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\MainSearchContainer.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.ui.DoubleTabProxyActivityWrapper",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\DoubleTabProxyActivityWrapper.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.ui.entrance.EntranceView",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\EntranceView.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.util.EntranceManager",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\EntranceManager.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "com.xiaomi.market.util.EntranceConfig",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\EntranceConfig.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "androidx.preference.Preference",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\Preference.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "java",
+          "-Dcom.android.sdklib.toolsdir=F:/Android/Sdk/cmdline-tools/latest",
+          "-classpath",
+          "F:/Android/Sdk/cmdline-tools/latest/lib/apkanalyzer-classpath.jar",
+          "com.android.tools.apk.analyzer.ApkAnalyzerCli",
+          "dex",
+          "code",
+          "--class",
+          "androidx.preference.TwoStatePreference",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\TwoStatePreference.smali",
+        "stderr": "Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=F:\\Temp\n"
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "xmltree",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk",
+          "res/bzf.xml"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\function_settings.xmltree.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "xmltree",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk",
+          "res/UPr.xml"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\main_search_container.xmltree.txt",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "F:\\Android\\Sdk\\build-tools\\36.1.0\\aapt.exe",
+          "dump",
+          "xmltree",
+          "F:\\Project\\07_Androd\\11_APK_Store\\analysis\\apk_4\\input.apk",
+          "res/i4B.xml"
+        ],
+        "exit_code": 0,
+        "stdout_path": "analysis\\apk_4\\native_main_search_box_layout.xmltree.txt",
+        "stderr": ""
+      }
+    ]
   }
 ]

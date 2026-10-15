@@ -1,0 +1,273 @@
+{
+  "apk_sha256": "1ac3be37cf56b29f417278903bca831e1623662e663b86b901316fae6fcebd10",
+  "directory": "analysis\\apk_4",
+  "baseline_directory": "analysis\\apk_1",
+  "schemas_equal": true,
+  "settings": [
+    {
+      "category": "导航栏管理",
+      "title": "视频专区",
+      "key": "pref_key_short_play",
+      "required": false
+    },
+    {
+      "category": "导航栏管理",
+      "title": "活动专题页",
+      "key": "pref_key_h5_topic",
+      "required": false
+    },
+    {
+      "category": "导航栏管理",
+      "title": "软件-全球上网",
+      "key": "pref_key_global_net",
+      "required": false
+    },
+    {
+      "category": "导航栏管理",
+      "title": "软件-快应用",
+      "key": "pref_key_quick_app",
+      "required": false
+    },
+    {
+      "category": "游戏服务管理",
+      "title": "自动生成云游戏桌面图标",
+      "key": "pref_key_cloud_game_icon",
+      "required": false
+    },
+    {
+      "category": "游戏服务管理",
+      "title": "显示游戏抽奖",
+      "key": "pref_key_support_game_lottery",
+      "required": false
+    },
+    {
+      "category": "游戏服务管理",
+      "title": "小游戏服务",
+      "key": "pref_key_mini_game",
+      "required": false
+    },
+    {
+      "category": "游戏服务管理",
+      "title": "显示首页最近使用的小程序",
+      "key": "pref_key_mini_program_switch",
+      "required": false
+    },
+    {
+      "category": "我的页功能管理",
+      "title": "手机清理功能",
+      "key": "pref_key_phone_clean",
+      "required": true
+    },
+    {
+      "category": "我的页功能管理",
+      "title": "开启应用安全检测",
+      "key": "pref_key_app_security_check",
+      "required": null
+    },
+    {
+      "category": "我的页功能管理",
+      "title": "应用锁",
+      "key": "pref_key_app_lock",
+      "required": true
+    },
+    {
+      "category": "我的页功能管理",
+      "title": "权限管理",
+      "key": "pref_key_permission_management",
+      "required": true
+    },
+    {
+      "category": "我的页功能管理",
+      "title": "互联升级",
+      "key": "pref_key_milink_service",
+      "required": true
+    },
+    {
+      "category": "其他功能管理",
+      "title": "显示福利活动",
+      "key": "pref_key_need_welfare",
+      "required": false
+    },
+    {
+      "category": "其他功能管理",
+      "title": "未成年人模式",
+      "key": "pref_key_child_mode_setting",
+      "required": false
+    },
+    {
+      "category": "其他功能管理",
+      "title": "果园入口",
+      "key": "pref_key_orchard",
+      "required": false
+    }
+  ],
+  "classes": [
+    {
+      "class": "com.xiaomi.market.business_ui.settings.function.FunctionSettingsFragment",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.business_ui.settings.PreferenceHelperKt",
+      "identical_smali": false,
+      "added_methods": [
+        "private static final handleClearCache$lambda$3(Landroid/content/DialogInterface;I)V",
+        "private static final handleClearUpdateRecord$lambda$4(Landroid/content/Context;Landroid/content/DialogInterface;I)V"
+      ],
+      "removed_methods": [
+        "private static final handleClearCache$lambda$4(Landroid/content/DialogInterface;I)V",
+        "private static final handleClearUpdateRecord$lambda$5(Landroid/content/Context;Landroid/content/DialogInterface;I)V"
+      ]
+    },
+    {
+      "class": "com.xiaomi.market.util.SettingsUtils",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.util.OrchardEntranceManager",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.util.PrefUtils",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.model.PageConfig",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.incentive.orchard.OrchardSdkHelper",
+      "identical_smali": false,
+      "added_methods": [
+        "public final ensureInitOrchard()V",
+        "public final fetchOrchardBannerData()V",
+        "public final getOrchardCompletedToday()Ljava/lang/Integer;",
+        "public final getOrchardIsNewUser()Z",
+        "public final getOrchardIsTaskDataReady()Z",
+        "public final getOrchardUpgradeTaskType()Ljava/lang/String;",
+        "public final launchOrchard(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/Map;Z)V",
+        "public final launchOrchard(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/Map;ZLl8/o;)V",
+        "public final launchOrchardH5$app_release(Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/Map;)V",
+        "public final setOnOrchardBannerDataReadyListener(Lkotlin/jvm/functions/Function0;)V",
+        "public static synthetic launchOrchard$default(Lcom/xiaomi/market/incentive/orchard/OrchardSdkHelper;Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/Map;ZLl8/o;ILjava/lang/Object;)V",
+        "public static synthetic launchOrchardH5$app_release$default(Lcom/xiaomi/market/incentive/orchard/OrchardSdkHelper;Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/Map;ILjava/lang/Object;)V"
+      ],
+      "removed_methods": [
+        "public static synthetic launchOrchard$default(Lcom/xiaomi/market/incentive/orchard/OrchardSdkHelper;Landroid/app/Activity;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/Map;ILjava/lang/Object;)V"
+      ]
+    },
+    {
+      "class": "com.xiaomi.market.incentive.IncentiveSDKHelper",
+      "identical_smali": false,
+      "added_methods": [
+        "public final getTaskCenterUrl(Ljava/lang/String;)Ljava/lang/String;",
+        "public final getTaskCenterUrl(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
+        "public final getTaskCenterUrl(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
+        "public final registerCountdownFloatViewController(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ll8/k;)Landroid/view/View;",
+        "public final registerFloatViewController(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ll8/k;)Landroid/view/View;",
+        "public static synthetic getTaskCenterUrl$default(Lcom/xiaomi/market/incentive/IncentiveSDKHelper;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/String;",
+        "public static synthetic registerCountdownFloatViewController$default(Lcom/xiaomi/market/incentive/IncentiveSDKHelper;Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ll8/k;ILjava/lang/Object;)Landroid/view/View;",
+        "public static synthetic registerFloatViewController$default(Lcom/xiaomi/market/incentive/IncentiveSDKHelper;Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ll8/k;ILjava/lang/Object;)Landroid/view/View;"
+      ],
+      "removed_methods": [
+        "public final registerCountdownFloatViewController(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Lba/k;)Landroid/view/View;",
+        "public final registerFloatViewController(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Lba/k;)Landroid/view/View;",
+        "public static synthetic getTaskCenterUrl$default(Lcom/xiaomi/market/incentive/IncentiveSDKHelper;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/String;",
+        "public static synthetic registerCountdownFloatViewController$default(Lcom/xiaomi/market/incentive/IncentiveSDKHelper;Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Lba/k;ILjava/lang/Object;)Landroid/view/View;",
+        "public static synthetic registerFloatViewController$default(Lcom/xiaomi/market/incentive/IncentiveSDKHelper;Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Lba/k;ILjava/lang/Object;)Landroid/view/View;"
+      ]
+    },
+    {
+      "class": "com.xiaomi.market.incentive.IncentiveRouter",
+      "identical_smali": false,
+      "added_methods": [
+        "private final createTabIntent(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Landroid/net/Uri;)Landroid/content/Intent;",
+        "private final moveExistingPlayletTaskToFront(Landroid/content/Context;)Z",
+        "public final handleTaskCenterBack(Landroid/content/Context;Ljava/lang/String;)Z"
+      ],
+      "removed_methods": [
+        "private final closeShortPlayDrawerIfNeed()V",
+        "private static final closeShortPlayDrawerIfNeed$lambda$2()V",
+        "public static synthetic a()V"
+      ]
+    },
+    {
+      "class": "com.xiaomi.market.business_ui.main.MarketTabActivity",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.business_ui.main.home.NativeHomePagePagerFragment",
+      "identical_smali": false,
+      "added_methods": [
+        "private final refreshSubFragment(Ll8/k;)V",
+        "private static final refreshSubFragment$lambda$30(Ll8/k;)V",
+        "public static synthetic F(Ll8/k;)V"
+      ],
+      "removed_methods": [
+        "private final refreshSubFragment(Lba/k;)V",
+        "private static final refreshSubFragment$lambda$30(Lba/k;)V",
+        "public static synthetic F(Lba/k;)V"
+      ]
+    },
+    {
+      "class": "com.xiaomi.market.business_ui.main.home.HomeFeatureTabFragment",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.widget.MainSearchContainer",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.ui.DoubleTabProxyActivityWrapper",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.ui.entrance.EntranceView",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.util.EntranceManager",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "com.xiaomi.market.util.EntranceConfig",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "androidx.preference.Preference",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    },
+    {
+      "class": "androidx.preference.TwoStatePreference",
+      "identical_smali": false,
+      "added_methods": [],
+      "removed_methods": []
+    }
+  ],
+  "scope": "static evidence; not runtime verification"
+}

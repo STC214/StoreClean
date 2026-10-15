@@ -3,6 +3,7 @@ package io.github.storeclean;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.content.res.XmlResourceParser;
 import android.view.View;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
@@ -13,8 +14,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.xmlpull.v1.XmlPullParser;
 
-/** Only registered package versions are touched; all preference overrides are read-only. */
+/** Registered versions and structurally compatible 4.x candidates; no direct storage edits. */
 public final class StoreHooks implements IXposedHookLoadPackage {
     private static final String PREFIX = "[StoreClean] ";
     private boolean initialized;
@@ -41,17 +43,20 @@ public final class StoreHooks implements IXposedHookLoadPackage {
         List<XC_MethodHook.Unhook> installed = new ArrayList<>();
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(Policy.TARGET, 0);
-            if (!Policy.supports(info.versionName, info.versionCode)) {
+            boolean registered = Policy.supports(info.versionName, info.versionCode);
+            if (!registered && !Policy.allowsStructuralProbe(info.versionName, info.versionCode)) {
                 XposedBridge.log(PREFIX + "unsupported version: " + info.versionName);
                 return;
             }
+            validateSettingsSchema(context);
             // Resolve the complete plan before installing: missing mandatory targets fail closed.
             List<Binding> plan = resolve(loader);
             for (Binding binding : plan) {
                 installed.add(XposedBridge.hookMethod(binding.method, binding.callback));
             }
             XposedBridge.log(PREFIX + "active version=" + info.versionName
-                    + " hooks=" + installed.size() + " controlled writes=blocked");
+                    + " hooks=" + installed.size() + " controlled writes=blocked"
+                    + " profile=" + (registered ? "registered" : "structural") + " schema=16");
         } catch (Throwable failure) {
             for (XC_MethodHook.Unhook hook : installed) {
                 try {
@@ -87,14 +92,23 @@ public final class StoreHooks implements IXposedHookLoadPackage {
         Class<?> sdk = Class.forName("com.xiaomi.market.incentive.orchard.OrchardSdkHelper", false, loader);
         int launches = 0;
         for (Method method : sdk.getDeclaredMethods()) {
-            if (method.getName().equals("launchOrchard")) {
+            if (method.getName().equals("launchOrchard")
+                    || (method.getName().startsWith("launchOrchardH5")
+                        && !method.getName().endsWith("$default"))) {
                 requireReturn(method, void.class);
+                if (java.lang.reflect.Modifier.isStatic(method.getModifiers())
+                        || method.getParameterTypes().length == 0
+                        || method.getParameterTypes()[0] != android.app.Activity.class) {
+                    throw new IllegalStateException("Unexpected orchard launch signature: " + method);
+                }
                 add(plan, method, constant(null));
-                launches++;
+                if (method.getName().equals("launchOrchard")) {
+                    launches++;
+                }
             }
         }
-        if (launches != 5) {
-            throw new IllegalStateException("Expected five orchard launch overloads, got " + launches);
+        if (launches < 5) {
+            throw new IllegalStateException("Expected at least five orchard launch overloads, got " + launches);
         }
         Class<?> manager = Class.forName("com.xiaomi.market.util.EntranceManager", false, loader);
         add(plan, manager.getDeclaredMethod("getEntranceConfig"), constant(null));
@@ -174,6 +188,40 @@ public final class StoreHooks implements IXposedHookLoadPackage {
         return plan;
     }
 
+    private static void validateSettingsSchema(Context context) throws Exception {
+        int id = context.getResources().getIdentifier("function_settings", "xml", Policy.TARGET);
+        if (id == 0) {
+            throw new IllegalStateException("Missing function_settings resource");
+        }
+        List<String> keys = new ArrayList<>();
+        List<Integer> groups = new ArrayList<>();
+        int group = -1;
+        XmlResourceParser parser = context.getResources().getXml(id);
+        try {
+            for (int event = parser.getEventType(); event != XmlPullParser.END_DOCUMENT; event = parser.next()) {
+                if (event != XmlPullParser.START_TAG) {
+                    continue;
+                }
+                if (parser.getName().endsWith("PreferenceCategory")) {
+                    group++;
+                }
+                String key = parser.getAttributeValue("http://schemas.android.com/apk/res/android", "key");
+                if (key != null) {
+                    if (!parser.getName().endsWith("CheckBoxPreference")) {
+                        throw new IllegalStateException("Unexpected keyed preference type: " + parser.getName());
+                    }
+                    keys.add(key);
+                    groups.add(group);
+                }
+            }
+        } finally {
+            parser.close();
+        }
+        if (group != 3 || !Policy.matchesSettingsSchema(keys, groups)) {
+            throw new IllegalStateException("Settings schema changed: " + keys);
+        }
+    }
+
     private static XC_MethodHook preferenceRead() {
         return new XC_MethodHook() {
             @Override
@@ -224,6 +272,18 @@ public final class StoreHooks implements IXposedHookLoadPackage {
     }
 
     private static void add(List<Binding> plan, Method method, XC_MethodHook callback) {
+        String name = method.getName();
+        if (name.equals("getEntranceConfig")) {
+            if (!method.getReturnType().getName().equals("com.xiaomi.market.util.EntranceConfig")) {
+                throw new IllegalStateException("Unexpected entrance config type: " + method);
+            }
+        } else {
+            boolean bool = Policy.GETTERS.containsKey(name) || name.equals("getBoolean")
+                    || name.equals("setBooleanSync") || name.equals("isOpen")
+                    || name.equals("needShowAnimation") || name.equals("getPersistedBoolean")
+                    || name.equals("persistBoolean") || name.equals("onPreferenceChange");
+            requireReturn(method, bool ? boolean.class : void.class);
+        }
         method.setAccessible(true);
         plan.add(new Binding(method, callback));
     }
